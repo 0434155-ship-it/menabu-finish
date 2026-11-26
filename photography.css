@@ -395,28 +395,37 @@
   height: 115%;
   object-fit: contain;
 }
-/* Keep the soft background inside the full-bleed section. */
+/* Preserve the counter crop and limit enlargement on wide viewports. */
 #about .story-portrait { overflow: hidden; }
 #about .story-portrait svg {
   display: block;
   width: 100%;
   height: 100%;
   overflow: hidden;
-  filter: blur(1px);
 }
 @media (max-width: 760px) {
   #about .story-portrait svg {
     height: auto;
     aspect-ratio: 4 / 3;
-    filter: blur(.6px);
   }
 }
 @media (min-width: 761px) {
-  #about::after {
+  #about::after { content: none; }
+  #about .story-portrait {
+    inset: 0 0 auto auto;
+    width: min(61%, 920px);
+    height: auto;
+    aspect-ratio: 691 / 720;
+  }
+  #about .story-portrait::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
     background:
-      linear-gradient(180deg, transparent 58%, var(--paper) 72%),
-      linear-gradient(90deg, var(--paper) 44%,
-        color-mix(in srgb, var(--paper) 85%, transparent) 50%,
-        color-mix(in srgb, var(--paper) 25%, transparent) 62%, transparent 72%);
+      linear-gradient(180deg, transparent 73%, var(--paper) 100%),
+      linear-gradient(90deg, var(--paper) 12%,
+        color-mix(in srgb, var(--paper) 85%, transparent) 21%,
+        color-mix(in srgb, var(--paper) 24%, transparent) 36%, transparent 47%);
   }
 }
