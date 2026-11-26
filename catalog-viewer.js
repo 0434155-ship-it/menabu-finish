@@ -47,6 +47,11 @@
     loader.src = source;
   }
 
+  function photoIndex(button, photos) {
+    const index = Number(button.dataset.photoIndex ?? 0);
+    return Number.isInteger(index) && photos[index] ? index : 0;
+  }
+
   function openViewer(button) {
     const id = button.dataset.photo;
     const product = P.find(item => item.id === id);
@@ -60,13 +65,13 @@
       control.hidden = i >= images.length;
       if (!control.hidden) control.textContent = viewLabel(images[i], i);
     });
-    const tile = button.querySelector('img');
-    const ratio = tile.naturalHeight ? tile.naturalWidth / tile.naturalHeight : 1.4;
+    const tile = button.closest('.catalog-media')?.querySelector('img');
+    const ratio = tile?.naturalHeight ? tile.naturalWidth / tile.naturalHeight : 1.4;
     viewer.style.setProperty('--photo-ratio', String(ratio));
     document.documentElement.classList.add('catalog-viewing');
     viewer.showModal();
     closeButton.focus({ preventScroll: true });
-    showPhoto(0);
+    showPhoto(photoIndex(button, images));
   }
 
   grid.addEventListener('click', event => {
@@ -77,7 +82,8 @@
   function preload(event) {
     const button = event.target.closest('button[data-photo]');
     if (!button) return;
-    const source = productViews(button.dataset.photo, pick[button.dataset.photo] ?? 0)[0];
+    const photos = productViews(button.dataset.photo, pick[button.dataset.photo] ?? 0);
+    const source = photos[photoIndex(button, photos)];
     if (source && !warmed.has(source)) {
       warmed.add(source);
       const img = new Image();

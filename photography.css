@@ -122,7 +122,7 @@
 
 :root[data-theme="light"] { --paper:#f4eee2; --tile:#ede3d4; --field:#faf6ef; }
 #catalog .card .ph.catalog-photo img,
-#catalog .card:hover .ph.catalog-photo img { object-fit:cover; transform:none; }
+#catalog .card:hover .ph.catalog-photo img { object-fit:var(--photo-fit, cover); transform:var(--photo-transform, none); }
 #catalog .card .ph.catalog-photo { background:transparent; }
 #wholesale .trade-hero, #wholesale .trade-scene { background:#211914; }
 #wholesale .trade-scene::before {
@@ -261,7 +261,7 @@
 
 /* Same crop and label positions for every retail card. */
 #catalog .card .ph { aspect-ratio: 4 / 3; }
-#catalog .catalog-photo :is(.tag, .photo-hint) {
+#catalog :is(.catalog-photo .tag, .catalog-media .photo-hint) {
   z-index: 2;
   padding: .28em .55em;
   border: 0;
@@ -273,7 +273,7 @@
   inset: 8px auto auto 8px !important;
   max-width: calc(55% - 8px);
 }
-#catalog .ph.catalog-photo .photo-hint {
+#catalog .catalog-media .photo-hint {
   inset: 8px 8px auto auto;
   max-width: calc(45% - 8px);
   text-align: right;
@@ -305,4 +305,60 @@
 }
 @media (min-width: 761px) {
   #journal #reel { --frame: clamp(190px, 20vw, 420px); }
+}
+
+/* The tile stays 4:3. Position the actual product within the tile. */
+#catalog .catalog-media { position: relative; min-width: 0; }
+#catalog .catalog-media .ph { overflow: hidden; }
+#catalog .catalog-media .photo-hint { cursor: pointer; }
+#catalog .catalog-media .photo-hint:focus-visible {
+  outline: 2px solid #fff7eb;
+  outline-offset: 2px;
+}
+#catalog .card .ph.catalog-photo img {
+  object-position: var(--photo-focus, center);
+}
+#catalog [data-card="p7"] .ph.catalog-photo img {
+  inset: 50% auto auto 50%;
+  width: 75%;
+  height: 133.333%;
+  --photo-transform: translate(-50%, -50%) rotate(90deg);
+  transform: var(--photo-transform);
+}
+
+#catalog [data-card="dragon-roll"] { --photo-focus: 50% 19%; }
+#catalog [data-card="p32"] .ph.catalog-photo img {
+  --photo-fit: fill;
+  inset: -64% 0 auto;
+  height: 175%;
+}
+#catalog [data-card="p34"] { --photo-focus: 56% 50%; }
+#catalog [data-card="p34"] .ph.catalog-photo img { --photo-transform: scale(1.055); transform: var(--photo-transform); }
+#catalog [data-card="p37"] { --photo-focus: 50% 68%; }
+#catalog [data-card="p37-vanilla"] { --photo-focus: 50% 76%; }
+#catalog [data-card="p37-raspberry"] { --photo-focus: 50% 70%; }
+#catalog [data-card="p37-caramel"] { --photo-focus: 50% 76%; }
+#catalog [data-card="p38"] { --photo-focus: 50% 64%; }
+#catalog [data-card="p38-walnut"] .ph.catalog-photo img {
+  --photo-transform: scale(1.15);
+  transform: var(--photo-transform);
+}
+#catalog :is([data-card="p38-ferrero"], [data-card="p38-raspberry"]) .ph.catalog-photo img {
+  --photo-focus: 50% 35%;
+  --photo-transform: scale(1.16);
+  transform: var(--photo-transform);
+  transform-origin: right center;
+}
+#catalog [data-card="p38-exotic"] { --photo-focus: 50% 59%; }
+#catalog [data-card="p23"] { --photo-focus: 50% 40%; }
+#catalog [data-card="p30"] { --photo-focus: 50% 58%; }
+#catalog [data-card="p43-meat"] { --photo-focus: 50% 61%; }
+#catalog [data-card="p52"] { --photo-focus: 50% 61%; }
+#catalog [data-card="p54"] { --photo-focus: 50% 60%; }
+
+/* A wider vertical crop keeps both the berries and the base in frame. */
+#catalog [data-card="p37-blueberry"] .ph.catalog-photo img {
+  inset: -33% 0 auto;
+  height: 157.5%;
+  object-fit: fill;
 }
