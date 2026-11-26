@@ -67,6 +67,7 @@
   align-self: center;
 }
 .founder .founder-portrait img {
+  filter: url("#founder-portrait-tone");
   position: static;
   width: 100%;
   height: auto;
