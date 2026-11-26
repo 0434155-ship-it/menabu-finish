@@ -395,3 +395,25 @@
   height: 115%;
   object-fit: contain;
 }
+/* Keep the soft background inside the full-bleed section. */
+#about .story-portrait { overflow: hidden; }
+#about .story-portrait img {
+  object-position: center 58%;
+  filter: blur(6px);
+  scale: 1.04;
+}
+@media (max-width: 760px) {
+  #about .story-portrait img {
+    aspect-ratio: 4 / 3;
+    filter: blur(4px);
+  }
+}
+@media (min-width: 761px) {
+  #about::after {
+    background:
+      linear-gradient(180deg, transparent 58%, var(--paper) 72%),
+      linear-gradient(90deg, var(--paper) 44%,
+        color-mix(in srgb, var(--paper) 85%, transparent) 50%,
+        color-mix(in srgb, var(--paper) 25%, transparent) 62%, transparent 72%);
+  }
+}
