@@ -314,7 +314,7 @@
   transform-origin: var(--photo-origin, center);
   transition: none;
 }
-#catalog :is([data-card="p7"], [data-card="p17"]) .ph.catalog-photo img {
+#catalog [data-card="p17"] .ph.catalog-photo img {
   inset: 50% auto auto 50%;
   width: 75%;
   height: 133.333%;

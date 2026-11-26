@@ -41,7 +41,7 @@ window.CATALOG_VIEWS = {
   ],
   "p7": [
     [
-      "muka/catalog/22-2.webp"
+      "muka/catalog/olive-loaf-landscape.webp"
     ]
   ],
   "p8": [
