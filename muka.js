@@ -238,7 +238,6 @@ function renderList(){slot.append(card);list.replaceChildren();const g=groups[gr
 function renderCard(announce){const d=item(),[name,w,p]=groups[group].rows[chosen];const visible=!mobile.matches||unfold;
  [...list.children].forEach((wrap,i)=>{const b=wrap.firstElementChild;const selected=i===chosen&&visible;b.classList.toggle('chosen',selected);if(mobile.matches){b.setAttribute('aria-expanded',String(selected));b.removeAttribute('aria-pressed')}else{b.setAttribute('aria-pressed',String(selected));b.removeAttribute('aria-expanded')}});
  (mobile.matches&&unfold?list.children[chosen]:slot).append(card);card.hidden=!visible;
- el('dishZoom').dataset.photoKind = /^f05[0-7]$/.test(d.id) ? 'salad' : '';
  const photo=el('dishPhoto');if(photo.dataset.for!==d.id){photo.dataset.ready='no';photo.onload=()=>{photo.dataset.ready='yes'};photo.onerror=()=>{photo.dataset.ready='error'};photo.src=mnbMedia(d.photo);photo.dataset.for=d.id;if(photo.complete&&photo.naturalWidth)photo.dataset.ready='yes'}photo.alt=name;
  el('dishZoom').setAttribute('aria-label','Увеличить фото: '+name);el('dishName').textContent=name;el('dishDescription').textContent=d.desc;
  el('dishWeight').textContent=d.weight||w;el('dishPrice').textContent=price(p);

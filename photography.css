@@ -451,16 +451,54 @@
   --salad-color: brightness(1.015) contrast(.99) saturate(1.13);
 }
 
-/* Keep the zoom button on the actual photo and preserve the full plate. */
-#dishZoom[data-photo-kind="salad"] {
-  width: min(100%, 42rem);
-  height: auto;
-  margin-inline: auto;
-}
-#dishZoom[data-photo-kind="salad"] img { height: auto; }
 
-#dishZoom:has(img[data-for="f050"]) { width: min(100%, 39rem); }
-#dishZoom #dishPhoto[data-for="f050"] {
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
+/* Give photos a stable stage while fitting the complete original image. */
+#food #dishZoom {
+  --dish-photo-height: clamp(225px, 46svh, 440px);
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: var(--dish-photo-height);
+  background: transparent;
+  border: 0;
+}
+#dishZoom .dish-photo-frame {
+  position: relative;
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  min-width: 0;
+}
+#food #dishPhoto {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: var(--dish-photo-height);
+  margin-inline: auto;
+  object-fit: contain;
+  object-position: center;
+}
+#dishPhoto[data-ready="no"] + .dish-photo-zoom { visibility: hidden; }
+
+#menuDialog[data-display="photo"] {
+  padding: 0;
+  background: transparent;
+}
+#menuDialog[data-display="photo"] .menu-dialog-top {
+  padding-inline: clamp(5px, 3vw, 16px);
+}
+#menuDialog[data-display="photo"] #dialogScan {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 78svh;
+  margin-inline: auto;
+  object-fit: contain;
+  object-position: center;
+}
+
+@media (max-width: 760px) {
+  #food #dishZoom { --dish-photo-height: clamp(175px, 63vw, 340px); }
+  #food .dish-item .dish-card { background: transparent; }
 }
