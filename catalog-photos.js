@@ -154,7 +154,7 @@ window.CATALOG_VIEWS = {
   ],
   "p27": [
     [
-      "muka/catalog/crust-06-1.webp",
+      "muka/catalog/pain-mango-passionfruit.webp",
       "muka/catalog/pain-cut.webp"
     ]
   ],

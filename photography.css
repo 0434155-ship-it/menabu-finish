@@ -380,7 +380,7 @@
 #catalog [data-card="p55"] { --photo-focus: 50% 54%; }
 #catalog [data-card="p52"] { --photo-focus: 50% 60%; }
 #catalog [data-card="p48"] { --photo-focus: 50% 72%; }
-#catalog [data-card="p27"] { --photo-focus: 50% 45%; }
+#catalog [data-card="p27"] { --photo-focus: 20% center; }
 
 #catalog [data-card="p37-blueberry"] { --photo-focus: 50% 55%; }
 
