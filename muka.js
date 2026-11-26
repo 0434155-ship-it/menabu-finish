@@ -238,6 +238,7 @@ function renderList(){slot.append(card);list.replaceChildren();const g=groups[gr
 function renderCard(announce){const d=item(),[name,w,p]=groups[group].rows[chosen];const visible=!mobile.matches||unfold;
  [...list.children].forEach((wrap,i)=>{const b=wrap.firstElementChild;const selected=i===chosen&&visible;b.classList.toggle('chosen',selected);if(mobile.matches){b.setAttribute('aria-expanded',String(selected));b.removeAttribute('aria-pressed')}else{b.setAttribute('aria-pressed',String(selected));b.removeAttribute('aria-expanded')}});
  (mobile.matches&&unfold?list.children[chosen]:slot).append(card);card.hidden=!visible;
+ el('dishZoom').dataset.photoKind = /^f05[0-7]$/.test(d.id) ? 'salad' : '';
  const photo=el('dishPhoto');if(photo.dataset.for!==d.id){photo.dataset.ready='no';photo.onload=()=>{photo.dataset.ready='yes'};photo.onerror=()=>{photo.dataset.ready='error'};photo.src=mnbMedia(d.photo);photo.dataset.for=d.id;if(photo.complete&&photo.naturalWidth)photo.dataset.ready='yes'}photo.alt=name;
  el('dishZoom').setAttribute('aria-label','Увеличить фото: '+name);el('dishName').textContent=name;el('dishDescription').textContent=d.desc;
  el('dishWeight').textContent=d.weight||w;el('dishPrice').textContent=price(p);
@@ -253,7 +254,14 @@ function step(n){const len=groups[group].rows.length;choose((chosen+n+len)%len,{
 el('prevDish').onclick=()=>step(-1);el('nextDish').onclick=()=>step(1);
 function drawDialog(){
  const cap=groups[group].rows[chosen][0]+' · '+(chosen+1)+' / '+groups[group].rows.length;
- dlg.dataset.display='photo';el('dialogCap').textContent=cap;el('dialogScan').alt=cap;el('dialogScan').src=mnbMedia(item().photo);dlg.scrollTop=0;
+ const dish = item();
+ const photo = el('dialogScan');
+ dlg.dataset.display='photo';
+ el('dialogCap').textContent=cap;
+ photo.alt=cap;
+ photo.dataset.for=dish.id;
+ photo.src=mnbMedia(dish.photo);
+ dlg.scrollTop=0;
 }
 el('dishZoom').onclick=()=>{drawDialog();dlg.showModal();el('dialogClose').focus()};
 el('dialogClose').onclick=()=>dlg.close();

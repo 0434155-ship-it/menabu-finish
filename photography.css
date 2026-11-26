@@ -132,13 +132,6 @@
 .founder .founder-portrait::after { content: none; }
 .founder .founder-words .founder-byline { margin-top: 1.4rem; font-size: .9em; }
 
-.dish-zoom:has(img[data-for="f050"]) { background: transparent; }
-#dishPhoto[data-for="f050"],
-#menuDialog #dialogScan[src$="/050.webp"] {
-  filter: brightness(1.2) contrast(1.04) saturate(1.24) sepia(.08);
-}
-
-
 /* Product and food photographs retain their original edges. */
 .ph.has-img::after { content: none; }
 #catalog .ph.catalog-photo,
@@ -431,3 +424,37 @@
 }
 
 #about .story-fact dd { color: var(--wine); }
+
+/* Use the same color correction in the menu and in the enlarged photo. */
+:is(#dishPhoto, #dialogScan)[data-for] {
+  filter: var(--salad-color, none);
+}
+:is(#dishPhoto, #dialogScan)[data-for="f050"] {
+  --salad-color: sepia(.05) brightness(1.15) contrast(1.035) saturate(1.26);
+}
+:is(#dishPhoto, #dialogScan)[data-for="f051"] {
+  --salad-color: brightness(1.09) contrast(1.035) saturate(1.2);
+}
+:is(#dishPhoto, #dialogScan)[data-for="f052"] {
+  --salad-color: brightness(1.075) contrast(1.025) saturate(1.2);
+}
+:is(#dishPhoto, #dialogScan)[data-for="f053"] {
+  --salad-color: sepia(.035) brightness(1.13) contrast(1.035) saturate(1.22);
+}
+:is(#dishPhoto, #dialogScan)[data-for="f054"] {
+  --salad-color: brightness(1.105) contrast(1.035) saturate(1.24);
+}
+:is(#dishPhoto, #dialogScan)[data-for="f055"] {
+  --salad-color: sepia(.045) brightness(1.13) contrast(1.025) saturate(1.23);
+}
+:is(#dishPhoto, #dialogScan):is([data-for="f056"], [data-for="f057"]) {
+  --salad-color: brightness(1.015) contrast(.99) saturate(1.13);
+}
+
+/* Keep the zoom button on the actual photo and preserve the full plate. */
+#dishZoom[data-photo-kind="salad"] {
+  width: min(100%, 42rem);
+  height: auto;
+  margin-inline: auto;
+}
+#dishZoom[data-photo-kind="salad"] img { height: auto; }
