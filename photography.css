@@ -429,3 +429,5 @@
         color-mix(in srgb, var(--paper) 24%, transparent) 36%, transparent 47%);
   }
 }
+
+#about .story-fact dd { color: var(--wine); }
