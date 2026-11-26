@@ -51,9 +51,5 @@ footer{background:#eadecc;padding-block:2rem}
   .product img{max-height:15rem}
 }
 
+
 .product { background: transparent; }
-.product img {
-  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent),
-              linear-gradient(180deg, transparent, #000 7%, #000 89%, transparent);
-  mask-composite: intersect;
-}

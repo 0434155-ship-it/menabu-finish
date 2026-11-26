@@ -1,8 +1,7 @@
-/* Product frames share a baseline. The background picks up the edge colours
-   of each photograph so the complete original can fit inside it. */
+/* Preserve each catalog photo’s full composition. */
 #catalog .ph.catalog-photo {
   aspect-ratio: 5 / 4;
-  background: var(--photo-matte, #eee7dc);
+  background: transparent;
 }
 #catalog .ph.catalog-photo img,
 #catalog .card:hover .ph.catalog-photo img {
@@ -139,12 +138,6 @@
   #wholesale .trade-scene::before { background:linear-gradient(0deg,#211914,transparent 30%); }
 }
 
-/* Fade editorial images into the section behind them. */
-.story-portrait img {
-  mask-image: linear-gradient(90deg, transparent, #000 18%),
-              linear-gradient(180deg, transparent, #000 8%, #000 88%, transparent);
-  mask-composite: intersect;
-}
 .founder .founder-portrait::after { content: none; }
 .founder .founder-words .founder-byline { margin-top: 1.4rem; font-size: .9em; }
 
@@ -154,19 +147,114 @@
   filter: brightness(1.2) contrast(1.04) saturate(1.24) sepia(.08);
 }
 
-#wholesale .trade-range-photo,
-#wholesale .trade-oven-photo,
-#wholesale .trade-track .frame img { background: transparent; }
-#wholesale .trade-range-photo img,
-#wholesale .trade-oven-photo img,
-#wholesale .trade-track .frame img {
-  mask-image: linear-gradient(90deg, transparent, #000 9%, #000 94%, transparent),
-              linear-gradient(180deg, transparent, #000 7%, #000 91%, transparent);
-  mask-composite: intersect;
+
+/* Product and food photographs retain their original edges. */
+.ph.has-img::after { content: none; }
+#catalog .ph.catalog-photo,
+.dish-card .dish-zoom,
+#food.pizza-menu .dish-zoom,
+#menuDialog[data-display="photo"] #dialogScan,
+#menuDialog[data-display="photo"] #dialogScan[src*="/pizza/"],
+#wholesale .trade-track .frame img,
+.hub-list img {
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
 }
-#wholesale .trade-track .frame img { object-fit: contain; }
-@media (max-width:760px) {
-  .story-portrait img {
-    mask-image: linear-gradient(180deg, transparent, #000 12%, #000 88%, transparent);
+#wholesale .trade-track .frame img { object-fit: cover; }
+
+/* The photo is a full-height layer of the section. Only the text side blends. */
+#about,
+#wholesale .trade-range,
+#wholesale .trade-why {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  background: var(--paper);
+}
+#about::after,
+#wholesale .trade-range::after,
+#wholesale .trade-why::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(var(--scene-direction, 90deg),
+    var(--paper) 44%, color-mix(in srgb, var(--paper) 85%, transparent) 50%,
+    color-mix(in srgb, var(--paper) 25%, transparent) 62%, transparent 72%);
+}
+#about .story-portrait,
+#wholesale .trade-range-photo,
+#wholesale .trade-oven-photo {
+  position: absolute;
+  inset: 0 0 0 auto;
+  z-index: -2;
+  width: 61%;
+  height: 100%;
+  max-width: none;
+  margin: 0;
+  background: transparent;
+}
+#about .story-portrait img,
+#wholesale .trade-range-photo img,
+#wholesale .trade-oven-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  aspect-ratio: auto;
+  object-fit: cover;
+}
+#about .story-portrait img { object-position: center 53%; }
+
+@media (min-width: 761px) {
+  #about > .shell { position: static; }
+  #about .story-grid {
+    grid-template-columns: minmax(0, 48%);
+    grid-template-areas: "opening" "body";
+  }
+  #wholesale .trade-range, #wholesale .trade-why {
+    margin-inline: calc(-1 * var(--gutter));
+    padding: clamp(2.4rem, 5vw, 5rem) var(--gutter);
+    min-height: 27rem;
+    grid-template-columns: minmax(0, 44%) 1fr;
+    grid-template-areas: "title ." "points .";
+  }
+  #wholesale .trade-why {
+    --scene-direction: 270deg;
+    grid-template-columns: 1fr minmax(0, 44%);
+    grid-template-areas: ". title" ". points";
+  }
+  #wholesale .trade-oven-photo { inset: 0 auto 0 0; }
+}
+@media (max-width: 760px) {
+  #about::after,
+  #wholesale .trade-range::after,
+  #wholesale .trade-why::after { content: none; }
+  #about .story-portrait,
+  #wholesale .trade-range-photo,
+  #wholesale .trade-oven-photo {
+    position: relative;
+    inset: auto;
+    z-index: auto;
+    width: auto;
+    align-self: stretch;
+    margin-inline: calc(-1 * var(--gutter));
+  }
+  #about .story-portrait img,
+  #wholesale .trade-range-photo img,
+  #wholesale .trade-oven-photo img { height: auto; }
+}
+@media (max-width: 760px) {
+  #about .story-portrait::after,
+  #wholesale .trade-range-photo::after,
+  #wholesale .trade-oven-photo::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0;
+    height: clamp(32px, 12vw, 85px);
+    background: linear-gradient(transparent, var(--paper));
+    pointer-events: none;
   }
 }
