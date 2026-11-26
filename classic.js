@@ -93,7 +93,8 @@ function viewLabel(path, index) {
     'muka/catalog/10-2.webp': 'В разрезе',
     'muka/catalog/11-1.webp': 'В разрезе',
     'muka/catalog/11-2.webp': 'В разрезе',
-    'muka/november/blueberry.webp': 'В разрезе'
+    'muka/november/blueberry.webp': 'В разрезе',
+    'muka/catalog/blueberry-whole.webp': 'Целый куб'
   };
   return labels[path] || (index === 0 ? 'Основной кадр' : 'В разрезе');
 }

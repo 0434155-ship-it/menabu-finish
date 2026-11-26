@@ -217,8 +217,8 @@ window.CATALOG_VIEWS = {
       "muka/catalog/10-2.webp"
     ],
     [
-      "muka/catalog/blueberry-whole.webp",
-      "muka/november/blueberry.webp"
+      "muka/november/blueberry.webp",
+      "muka/catalog/blueberry-whole.webp"
     ],
     [
       "muka/catalog/11-1.webp"

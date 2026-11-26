@@ -311,6 +311,7 @@
   object-position: var(--photo-focus, center);
   background: transparent;
   transform: var(--photo-transform, none);
+  transform-origin: var(--photo-origin, center);
   transition: none;
 }
 #catalog :is([data-card="p7"], [data-card="p17"]) .ph.catalog-photo img {
@@ -327,46 +328,70 @@
   inset: -64% 0 auto;
   height: 175%;
 }
-#catalog [data-card="p34"] { --photo-focus: 56% 50%; }
-#catalog [data-card="p34"] .ph.catalog-photo img { --photo-transform: scale(1.055); transform: var(--photo-transform); }
+#catalog [data-card="p34"] { --photo-focus: 56% 55%; }
+#catalog [data-card="p34"] .ph.catalog-photo img { --photo-transform: scale(1.14); transform: var(--photo-transform); }
 #catalog [data-card="p37"] { --photo-focus: 50% 68%; }
 #catalog [data-card="p37-vanilla"] { --photo-focus: 50% 76%; }
 #catalog [data-card="p37-raspberry"] { --photo-focus: 50% 70%; }
 #catalog [data-card="p37-caramel"] { --photo-focus: 50% 76%; }
 #catalog [data-card="p38"] { --photo-focus: 50% 64%; }
 #catalog [data-card="p38-walnut"] .ph.catalog-photo img {
-  --photo-transform: scale(1.15);
+  --photo-transform: scale(1.14);
+  --photo-origin: right center;
   transform: var(--photo-transform);
 }
 #catalog :is([data-card="p38-ferrero"], [data-card="p38-raspberry"]) .ph.catalog-photo img {
-  --photo-focus: 50% 35%;
-  --photo-transform: scale(1.23);
+  --photo-focus: 50% 34%;
+  --photo-transform: scale(1.32);
   transform: var(--photo-transform);
-  transform-origin: 100% 50%;
+  --photo-origin: right center;
 }
-#catalog [data-card="p38-exotic"] { --photo-focus: 50% 59%; }
 #catalog [data-card="p23"] { --photo-focus: 50% 40%; }
 #catalog [data-card="p30"] { --photo-focus: 50% 58%; }
 #catalog [data-card="p43-meat"] { --photo-focus: 50% 61%; }
-#catalog [data-card="p52"] { --photo-focus: 50% 61%; }
 #catalog [data-card="p54"] { --photo-focus: 50% 60%; }
 
-/* A wider vertical crop keeps both the berries and the base in frame. */
-#catalog [data-card="p37-blueberry"] .ph.catalog-photo img {
-  inset: -33% 0 auto;
-  height: 157.5%;
-  --photo-fit: fill;
-}
 
 #catalog [data-card="p13"] { --photo-focus: 50% 40%; }
 #catalog [data-card="p46"] { --photo-focus: 44% 72%; }
 #catalog [data-card^="p46-"] { --photo-focus: 50% 59%; }
-#catalog [data-card="p59"] { --photo-focus: 53% 52%; }
-#catalog [data-card="p58"] { --photo-focus: 53% 57%; }
 #catalog [data-card="p56"] { --photo-focus: 50% 32%; }
 #catalog [data-card="p53"] { --photo-focus: 55% 70%; }
-#catalog [data-card="p55"] { --photo-focus: 50% 55%; }
 #catalog [data-card="p51"] { --photo-focus: 50% 62%; }
 #catalog [data-card="p50"] { --photo-focus: 50% 63%; }
-#catalog [data-card="p48"] { --photo-focus: 50% 59%; }
 #catalog [data-card="p48-blueberry"] { --photo-focus: 50% 63%; }
+
+/* Place the subject, rather than the source image, at the center of each tile. */
+#catalog [data-card="p12"] {
+  --photo-focus: left center;
+  --photo-transform: scale(1.13);
+  --photo-origin: left center;
+}
+#catalog [data-card="p5"] { --photo-focus: 50% 62%; }
+#catalog [data-card="p4"] { --photo-focus: 43% 46%; }
+#catalog [data-card="p31"] { --photo-focus: 28% 52%; }
+#catalog [data-card="p36"] { --photo-focus: 50% 52%; }
+#catalog [data-card="p38-exotic"] { --photo-focus: 50% 58%; }
+#catalog [data-card="p40"] { --photo-focus: 50% 59%; }
+#catalog [data-card="p46-vanilla"] { --photo-focus: 50% 53%; }
+#catalog [data-card="p46-coffee"] { --photo-focus: 50% 55%; }
+#catalog [data-card="p61"] { --photo-focus: 50% 78%; }
+#catalog [data-card="p57"] { --photo-focus: 50% 53%; }
+#catalog [data-card="p55"] { --photo-focus: 50% 54%; }
+#catalog [data-card="p52"] { --photo-focus: 50% 60%; }
+#catalog [data-card="p48"] { --photo-focus: 50% 72%; }
+#catalog [data-card="p27"] { --photo-focus: 50% 45%; }
+
+#catalog [data-card="p37-blueberry"] { --photo-focus: 50% 55%; }
+
+/* Dark edges of the source carry through the wide preview while all three
+   pieces remain visible at their original proportions. */
+#catalog #grid :is([data-card="p59"], [data-card="p58"]) .ph.catalog-photo {
+  --photo-fit: contain;
+  background: #111110;
+}
+#catalog #grid :is([data-card="p59"], [data-card="p58"]) .catalog-photo img {
+  inset: -8% 0 auto;
+  height: 115%;
+  object-fit: contain;
+}
