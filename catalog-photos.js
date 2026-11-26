@@ -288,21 +288,6 @@ window.CATALOG_VIEWS = {
   "p46": [
     [
       "muka/catalog/16-1.webp"
-    ],
-    [
-      "muka/catalog/17-3.webp"
-    ],
-    [
-      "muka/catalog/16-2.webp"
-    ],
-    [
-      "muka/catalog/17-1.webp"
-    ],
-    [
-      "muka/catalog/17-4.webp"
-    ],
-    [
-      "muka/catalog/16-4.webp"
     ]
   ],
   "p47": [
@@ -483,6 +468,31 @@ window.CATALOG_VIEWS = {
   "p45-poppy": [
     [
       "muka/catalog/poppy-bagel.webp"
+    ]
+  ],
+  "p46-caramel": [
+    [
+      "muka/catalog/16-2.webp"
+    ]
+  ],
+  "p46-raspberry": [
+    [
+      "muka/catalog/16-4.webp"
+    ]
+  ],
+  "p46-chocolate": [
+    [
+      "muka/catalog/17-1.webp"
+    ]
+  ],
+  "p46-vanilla": [
+    [
+      "muka/catalog/17-3.webp"
+    ]
+  ],
+  "p46-coffee": [
+    [
+      "muka/catalog/17-4.webp"
     ]
   ]
 };

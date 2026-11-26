@@ -3,13 +3,6 @@
   aspect-ratio: 5 / 4;
   background: transparent;
 }
-#catalog .ph.catalog-photo img,
-#catalog .card:hover .ph.catalog-photo img {
-  object-fit: contain;
-  object-position: center;
-  transform: none;
-  background: transparent;
-}
 #catalog [data-card] { scroll-margin-top: calc(var(--top-height, 92px) + 56px); }
 
 @media (min-width: 761px) {
@@ -121,8 +114,6 @@
 }
 
 :root[data-theme="light"] { --paper:#f4eee2; --tile:#ede3d4; --field:#faf6ef; }
-#catalog .card .ph.catalog-photo img,
-#catalog .card:hover .ph.catalog-photo img { object-fit:var(--photo-fit, cover); transform:var(--photo-transform, none); }
 #catalog .card .ph.catalog-photo { background:transparent; }
 #wholesale .trade-hero, #wholesale .trade-scene { background:#211914; }
 #wholesale .trade-scene::before {
@@ -310,19 +301,23 @@
 /* The tile stays 4:3. Position the actual product within the tile. */
 #catalog .catalog-media { position: relative; min-width: 0; }
 #catalog .catalog-media .ph { overflow: hidden; }
-#catalog .catalog-media .photo-hint { cursor: pointer; }
+#catalog .catalog-media .photo-hint { cursor: pointer; pointer-events: auto; }
 #catalog .catalog-media .photo-hint:focus-visible {
   outline: 2px solid #fff7eb;
   outline-offset: 2px;
 }
-#catalog .card .ph.catalog-photo img {
+#catalog #grid .card .ph.catalog-photo img {
+  object-fit: var(--photo-fit, cover);
   object-position: var(--photo-focus, center);
+  background: transparent;
+  transform: var(--photo-transform, none);
+  transition: none;
 }
-#catalog [data-card="p7"] .ph.catalog-photo img {
+#catalog :is([data-card="p7"], [data-card="p17"]) .ph.catalog-photo img {
   inset: 50% auto auto 50%;
   width: 75%;
   height: 133.333%;
-  --photo-transform: translate(-50%, -50%) rotate(90deg);
+  --photo-transform: translate(-50%, -50%) rotate(-90deg);
   transform: var(--photo-transform);
 }
 
@@ -345,9 +340,9 @@
 }
 #catalog :is([data-card="p38-ferrero"], [data-card="p38-raspberry"]) .ph.catalog-photo img {
   --photo-focus: 50% 35%;
-  --photo-transform: scale(1.16);
+  --photo-transform: scale(1.23);
   transform: var(--photo-transform);
-  transform-origin: right center;
+  transform-origin: 100% 50%;
 }
 #catalog [data-card="p38-exotic"] { --photo-focus: 50% 59%; }
 #catalog [data-card="p23"] { --photo-focus: 50% 40%; }
@@ -360,5 +355,18 @@
 #catalog [data-card="p37-blueberry"] .ph.catalog-photo img {
   inset: -33% 0 auto;
   height: 157.5%;
-  object-fit: fill;
+  --photo-fit: fill;
 }
+
+#catalog [data-card="p13"] { --photo-focus: 50% 40%; }
+#catalog [data-card="p46"] { --photo-focus: 44% 72%; }
+#catalog [data-card^="p46-"] { --photo-focus: 50% 59%; }
+#catalog [data-card="p59"] { --photo-focus: 53% 52%; }
+#catalog [data-card="p58"] { --photo-focus: 53% 57%; }
+#catalog [data-card="p56"] { --photo-focus: 50% 32%; }
+#catalog [data-card="p53"] { --photo-focus: 55% 70%; }
+#catalog [data-card="p55"] { --photo-focus: 50% 55%; }
+#catalog [data-card="p51"] { --photo-focus: 50% 62%; }
+#catalog [data-card="p50"] { --photo-focus: 50% 63%; }
+#catalog [data-card="p48"] { --photo-focus: 50% 59%; }
+#catalog [data-card="p48-blueberry"] { --photo-focus: 50% 63%; }

@@ -48,15 +48,16 @@
   }
 
   function photoIndex(button, photos) {
-    const index = Number(button.dataset.photoIndex ?? 0);
-    return Number.isInteger(index) && photos[index] ? index : 0;
+    const index = Number(button.dataset.photoIndex);
+    return Number.isInteger(index) && photos[index] ? index : null;
   }
 
   function openViewer(button) {
     const id = button.dataset.photo;
     const product = P.find(item => item.id === id);
     images = productViews(id, pick[id] ?? 0);
-    if (!product || !images.length) return;
+    const index = photoIndex(button, images);
+    if (!product || index === null) return;
     trigger = button;
     productName = product.n;
     caption.textContent = productName;
@@ -71,7 +72,7 @@
     document.documentElement.classList.add('catalog-viewing');
     viewer.showModal();
     closeButton.focus({ preventScroll: true });
-    showPhoto(photoIndex(button, images));
+    showPhoto(index);
   }
 
   grid.addEventListener('click', event => {

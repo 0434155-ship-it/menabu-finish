@@ -42,8 +42,8 @@ function restoreCartItem(item) {
   if (typeof item.pre === 'string' && Object.hasOwn(SEASONAL, item.pre) && item.id?.startsWith('pre-' + item.pre + '-')) return item;
   for (const product of P) {
     const variant = product.v.find(v =>
-      (product.id === item.id && v.l === item.vl) ||
-      ((product.gallery || product.id) === item.id && v.previous !== undefined && v.previous === item.vl)
+      ((product.id === item.id || product.legacyProduct === item.id) && v.l === item.vl) ||
+      ((product.gallery || product.id) === item.id || product.legacyProduct === item.id) && v.previous !== undefined && v.previous === item.vl
     );
     if (!variant) continue;
     return {id: product.id, name: product.n, vl: variant.l, price: variant.p, q: item.q,
@@ -112,7 +112,7 @@ function card(p){
   const icon=p.icon||CATS.find(c=>c.id===p.c).icon;
   const tag=p.tag?`<span class="tag ${p.tag==='Хит'?'hot':''}">${p.tag}</span>`:'';
   const vars=p.v.length>1?`<div class="vars">${p.v.map((x,i)=>`<button type="button" class="var" data-p="${p.id}" data-i="${i}" aria-pressed="${i===vi}">${esc(x.l)}</button>`).join('')}</div>`:'';
-  const unit=p.v.length===1?`<small>${esc(vr.l)}</small>`:'';
+  const unit=p.v.length===1?`<small>${esc(vr.unit || vr.l)}</small>`:'';
   const priced = Number.isFinite(vr.p);
   const priceLabel = priced ? rub(vr.p) : 'Цена по запросу';
   const ctl=q?`<span class="stepper"><button type="button" data-dec="${p.id}" aria-label="Меньше">−</button><span>${q}</span><button type="button" data-inc="${p.id}" aria-label="Больше">+</button></span>`
@@ -122,7 +122,7 @@ function card(p){
   const detail = media.length > 1;
   const primary = media[0];
   const hint = detail ? `<button type="button" class="photo-hint" data-photo="${p.id}" data-photo-index="1" aria-haspopup="dialog">${esc(viewLabel(media[1], 1))}</button>` : '';
-  const ph = primary ? `<button type="button" class="ph has-img catalog-photo" data-photo="${p.id}" aria-haspopup="dialog" aria-label="Увеличить фото — ${esc(p.n)}">${tag}${cardImage(primary, p.n)}</button>` : `<div class="ph">${tag}<svg aria-hidden="true"><use href="#${icon}"/></svg></div>`;
+  const ph = primary ? `<button type="button" class="ph has-img catalog-photo" data-photo="${p.id}" data-photo-index="0" aria-haspopup="dialog" aria-label="Увеличить фото — ${esc(p.n)}">${tag}${cardImage(primary, p.n)}</button>` : `<div class="ph">${tag}<svg aria-hidden="true"><use href="#${icon}"/></svg></div>`;
   const ingredients = vr.ingredients || p.ingredients;
   const composition = `<details class="product-ingredients"><summary>Состав</summary><p>${esc(ingredients)}</p></details>`;
   return `<article class="card" data-card="${p.id}"><div class="catalog-media">${ph}${hint}</div>
