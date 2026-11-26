@@ -430,7 +430,7 @@
   filter: var(--salad-color, none);
 }
 :is(#dishPhoto, #dialogScan)[data-for="f050"] {
-  --salad-color: sepia(.05) brightness(1.15) contrast(1.035) saturate(1.26);
+  --salad-color: url("#greek-salad-light");
 }
 :is(#dishPhoto, #dialogScan)[data-for="f051"] {
   --salad-color: brightness(1.09) contrast(1.035) saturate(1.2);
@@ -458,3 +458,9 @@
   margin-inline: auto;
 }
 #dishZoom[data-photo-kind="salad"] img { height: auto; }
+
+#dishZoom:has(img[data-for="f050"]) { width: min(100%, 39rem); }
+#dishZoom #dishPhoto[data-for="f050"] {
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
