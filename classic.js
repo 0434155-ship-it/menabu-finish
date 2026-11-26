@@ -78,7 +78,7 @@ function productViews(id, index) {
   const product = P.find(p => p.id === id);
   const variant = product?.v[index];
   if (!variant || variant.photo === null) return [];
-  const options = window.CATALOG_VIEWS[product.gallery || id] || [];
+  const options = window.CATALOG_VIEWS?.[product.gallery || id] || [];
   return options.length === 1 ? options[0] : (options[variant.photo ?? index] || []);
 }
 
@@ -99,7 +99,10 @@ function viewLabel(path, index) {
 }
 
 function cardImage(path, name) {
-  const image = window.BAKERY_PHOTOS[path];
+  const image = window.BAKERY_PHOTOS?.[path];
+  if (!image?.sizes || !image.width || !image.height) {
+    return `<img loading="lazy" decoding="async" src="${mnbMedia(path)}" alt="${esc(name)}">`;
+  }
   const variants = [...image.sizes, [path, image.width]];
   const srcset = variants.map(([file, width]) => mnbMedia(file) + ' ' + width + 'w').join(', ');
   return `<img loading="lazy" decoding="async" src="${mnbMedia(path)}" srcset="${srcset}" sizes="(max-width: 620px) 48vw, (max-width: 990px) 32vw, 24vw" width="${image.width}" height="${image.height}" alt="${esc(name)}">`;
@@ -118,34 +121,34 @@ function card(p){
   const media = productViews(p.id, vi);
   const detail = media.length > 1;
   const primary = media[0];
-  const background = primary ? window.BAKERY_PHOTOS[primary].tones.join(', ') : '';
+  const tones = primary && window.BAKERY_PHOTOS?.[primary]?.tones;
+  const matte = tones?.length ? ` style="--photo-matte:linear-gradient(${tones.join(', ')})"` : '';
   const hint = detail ? `<span class="photo-hint">${viewLabel(media[1], 1)}</span>` : '';
-  const ph = primary ? `<button type="button" class="ph has-img catalog-photo" style="--photo-matte:linear-gradient(${background})" data-photo="${p.id}" aria-haspopup="dialog" aria-label="Увеличить фото — ${esc(p.n)}">${tag}${cardImage(primary, p.n)}${hint}</button>` : `<div class="ph">${tag}<svg aria-hidden="true"><use href="#${icon}"/></svg></div>`;
+  const ph = primary ? `<button type="button" class="ph has-img catalog-photo"${matte} data-photo="${p.id}" aria-haspopup="dialog" aria-label="Увеличить фото — ${esc(p.n)}">${tag}${cardImage(primary, p.n)}${hint}</button>` : `<div class="ph">${tag}<svg aria-hidden="true"><use href="#${icon}"/></svg></div>`;
   return `<article class="card" data-card="${p.id}">${ph}
   <h3>${esc(p.n)}</h3><p class="desc">${esc(p.d)}</p>${p.min?`<p class="note-min">Заказ от ${p.min} шт.</p>`:''}${vars}
   <div class="buy"><span class="price">${priceLabel}${unit}</span>${priced ? ctl : inquiry}</div></article>`;
 }
 let visibleProducts=8,shownCat='';
-function renderGrid(anim){
+function renderGrid(){
   if(cat!==shownCat){visibleProducts=8;shownCat=cat}
   const all=P.filter(p=>p.c===cat);
   const more=document.getElementById('moreProducts');more.hidden=visibleProducts>=all.length;
   more.textContent='Ещё из этой коллекции ('+Math.max(0,all.length-visibleProducts)+') ↓';
   $('#grid').innerHTML=all.slice(0,visibleProducts).map(card).join('');
-  if(anim){[...$('#grid').children].forEach((el,i)=>{el.classList.add('rv');el.style.setProperty('--d',Math.min(i,8)*.07+'s')});observeRv()}
 }
 function renderBan(swap){
   const c=CATS.find(x=>x.id===cat),b=$('#catban');
   $('#catbanImg').src=mnbMedia('img/'+c.img+'.jpg');$('#catbanN').textContent=c.kick;$('#catbanT').textContent=c.name;
   if(swap){b.classList.remove('swap');void b.offsetWidth;b.classList.add('swap')}
 }
-document.getElementById('moreProducts').onclick=()=>{const prev=visibleProducts;visibleProducts+=8;renderGrid(false);const added=$('#grid').children[prev];if(added){added.setAttribute('tabindex','-1');added.focus({preventScroll:true});added.scrollIntoView({behavior:'instant',block:'nearest'})}};
+document.getElementById('moreProducts').onclick=()=>{const prev=visibleProducts;visibleProducts+=8;renderGrid();const added=$('#grid').children[prev];if(added){added.setAttribute('tabindex','-1');added.focus({preventScroll:true});added.scrollIntoView({behavior:'instant',block:'nearest'})}};
 function selectCategory(id) {
   if (id === cat) return;
   cat = id;
   renderTabs();
   renderBan(true);
-  renderGrid(true);
+  renderGrid();
 }
 $('#tabs').addEventListener('click', e => {
   const button = e.target.closest('[data-c]');
@@ -362,4 +365,4 @@ $('#policyDlg').addEventListener('click',e=>{if(e.target.id==='policyDlg')e.targ
 document.addEventListener('change',e=>{if(e.target.closest&&e.target.closest('.consent')&&e.target.checked)e.target.closest('.consent').classList.remove('bad')});
 let tt;function toast(m){const el=$('#toast');el.textContent=m;el.hidden=false;clearTimeout(tt);tt=setTimeout(()=>el.hidden=true,1800)}
 
-renderTabs();renderBan();renderGrid(true);Object.keys(SEASONAL).forEach(renderBuilder);renderCount();observeRv();onScroll();
+renderTabs();renderBan();renderGrid();Object.keys(SEASONAL).forEach(renderBuilder);renderCount();observeRv();onScroll();
