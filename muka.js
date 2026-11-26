@@ -27,14 +27,15 @@ function route(initial){
  else if(key==='exclusive'){selectCategory('exclusive');key='catalog'}
  else if(key==='catalog' && cat==='exclusive'){selectCategory('bread')}
  if(!Object.hasOwn(names,key)||(SEASONAL[key]&&!SEASONAL[key].open))key='top';
- const separate=separateAreas.has(key);
- document.body.dataset.view=key in SEASONAL?key:'home';document.body.classList.toggle('opt-page',key==='wholesale');
- areas.forEach(a=>{a.hidden=separate?a.dataset.area!==key:separateAreas.has(a.dataset.area)});
+ const areaKey=key==='founder'?'wholesale':key;
+ const separate=separateAreas.has(areaKey);
+ document.body.dataset.view=key in SEASONAL?key:'home';document.body.classList.toggle('opt-page',areaKey==='wholesale');
+ areas.forEach(a=>{a.hidden=separate?a.dataset.area!==areaKey:separateAreas.has(a.dataset.area)});
  el('breadcrumbs').hidden=!separate;el('crumbName').textContent=names[key]||'';
- const section = key === 'awards' ? 'about' : key;
+ const section = key === 'awards' ? 'about' : areaKey;
  document.querySelectorAll('header nav a').forEach(a=>{if(a.hash==='#'+section)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current')});
  menu(false);
- const target=chosenProduct ? el('grid').querySelector('[data-card="' + chosenProduct.id + '"]') : key==='top'||separate?null:el(key);
+ const target=chosenProduct ? el('grid').querySelector('[data-card="' + chosenProduct.id + '"]') : key==='top'||(separate&&key===areaKey)?null:el(key);
  function move(){if(target)target.scrollIntoView({block:'start',behavior:'instant'});else scrollTo({top:0,behavior:'instant'})}
  if(!initial||location.hash){requestAnimationFrame(()=>requestAnimationFrame(move))}
  if(!initial&&separate){const dest=el(key)?.querySelector('h2');if(dest){dest.tabIndex=-1;dest.focus({preventScroll:true})}}
