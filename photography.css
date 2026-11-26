@@ -129,8 +129,6 @@
   #wholesale .trade-scene::before { background:linear-gradient(0deg,#211914,transparent 30%); }
 }
 
-.founder .founder-portrait::after { content: none; }
-.founder .founder-words .founder-byline { margin-top: 1.4rem; font-size: .9em; }
 
 /* Product and food photographs retain their original edges. */
 .ph.has-img::after { content: none; }
