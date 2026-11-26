@@ -122,7 +122,7 @@
 
 :root[data-theme="light"] { --paper:#f4eee2; --tile:#ede3d4; --field:#faf6ef; }
 #catalog .card .ph.catalog-photo img,
-#catalog .card:hover .ph.catalog-photo img { object-fit:contain; transform:none; }
+#catalog .card:hover .ph.catalog-photo img { object-fit:cover; transform:none; }
 #catalog .card .ph.catalog-photo { background:transparent; }
 #wholesale .trade-hero, #wholesale .trade-scene { background:#211914; }
 #wholesale .trade-scene::before {
@@ -257,4 +257,52 @@
     background: linear-gradient(transparent, var(--paper));
     pointer-events: none;
   }
+}
+
+/* Same crop and label positions for every retail card. */
+#catalog .card .ph { aspect-ratio: 4 / 3; }
+#catalog .catalog-photo :is(.tag, .photo-hint) {
+  z-index: 2;
+  padding: .28em .55em;
+  border: 0;
+  color: #fff7eb;
+  background: #302720e8;
+  font: 550 clamp(.62rem, 1vw, .78rem)/1.2 var(--sans);
+}
+#catalog .ph.catalog-photo .tag {
+  inset: 8px auto auto 8px !important;
+  max-width: calc(55% - 8px);
+}
+#catalog .ph.catalog-photo .photo-hint {
+  inset: 8px 8px auto auto;
+  max-width: calc(45% - 8px);
+  text-align: right;
+}
+#catalog .product-ingredients { margin: 0 0 .8rem; }
+#catalog .product-ingredients summary {
+  width: fit-content;
+  cursor: pointer;
+  color: var(--crust);
+  font-size: .875rem;
+}
+#catalog .product-ingredients p {
+  margin: .4rem 0 0;
+  color: var(--muted);
+  font-size: .875rem;
+  line-height: 1.5;
+}
+
+/* The journal reel uses an edge-to-edge portrait format. */
+#journal #reel .frame img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 20 / 23;
+  object-fit: cover;
+  object-position: center;
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+@media (min-width: 761px) {
+  #journal #reel { --frame: clamp(190px, 20vw, 420px); }
 }

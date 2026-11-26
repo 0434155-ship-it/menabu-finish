@@ -121,12 +121,12 @@ function card(p){
   const media = productViews(p.id, vi);
   const detail = media.length > 1;
   const primary = media[0];
-  const tones = primary && window.BAKERY_PHOTOS?.[primary]?.tones;
-  const matte = tones?.length ? ` style="--photo-matte:linear-gradient(${tones.join(', ')})"` : '';
   const hint = detail ? `<span class="photo-hint">${viewLabel(media[1], 1)}</span>` : '';
-  const ph = primary ? `<button type="button" class="ph has-img catalog-photo"${matte} data-photo="${p.id}" aria-haspopup="dialog" aria-label="Увеличить фото — ${esc(p.n)}">${tag}${cardImage(primary, p.n)}${hint}</button>` : `<div class="ph">${tag}<svg aria-hidden="true"><use href="#${icon}"/></svg></div>`;
+  const ph = primary ? `<button type="button" class="ph has-img catalog-photo" data-photo="${p.id}" aria-haspopup="dialog" aria-label="Увеличить фото — ${esc(p.n)}">${tag}${cardImage(primary, p.n)}${hint}</button>` : `<div class="ph">${tag}<svg aria-hidden="true"><use href="#${icon}"/></svg></div>`;
+  const ingredients = vr.ingredients || p.ingredients;
+  const composition = `<details class="product-ingredients"><summary>Состав</summary><p>${esc(ingredients)}</p></details>`;
   return `<article class="card" data-card="${p.id}">${ph}
-  <h3>${esc(p.n)}</h3><p class="desc">${esc(p.d)}</p>${p.min?`<p class="note-min">Заказ от ${p.min} шт.</p>`:''}${vars}
+  <h3>${esc(p.n)}</h3><p class="desc">${esc(p.d)}</p>${composition}${p.min?`<p class="note-min">Заказ от ${p.min} шт.</p>`:''}${vars}
   <div class="buy"><span class="price">${priceLabel}${unit}</span>${priced ? ctl : inquiry}</div></article>`;
 }
 let visibleProducts=8,shownCat='';
