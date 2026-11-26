@@ -501,3 +501,29 @@
   #food #dishZoom { --dish-photo-height: clamp(175px, 63vw, 340px); }
   #food .dish-item .dish-card { background: transparent; }
 }
+
+#founder .founder-words h2 {
+  white-space: normal;
+  font-size: clamp(2.1rem, 4vw, 3.7rem);
+}
+#founder .founder-words h2 em { display: block; }
+#founder .founder-words p {
+  max-width: 62ch;
+  font-size: 16px;
+  line-height: 1.56;
+  margin-bottom: 13px;
+}
+#founder .founder-words p:last-child { margin-bottom: 0; }
+
+@media (min-width: 761px) {
+  #founder .founder-layout { grid-template-columns: 46% 54%; }
+  #founder .founder-words { padding: 52px clamp(28px, 4.25vw, 65px); }
+  #founder .founder-portrait { align-self: stretch; }
+  #founder .founder-portrait img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+}
