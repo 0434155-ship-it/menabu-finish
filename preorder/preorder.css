@@ -465,5 +465,3 @@ header .hp-season-banner .order-inner { min-height: 40px; padding-block: 5px; }
 }
 
 .hp-page .hp-image-crumb-full { position:relative; overflow:hidden; aspect-ratio:990/925; --top-cut:-18.1818%; }
-.hp-page .hp-pickup-composition { display:block; }
-.hp-pickup-real-stollen { filter:brightness(.94) saturate(.9) sepia(.1) drop-shadow(4px 10px 10px #111b0ba8); }
