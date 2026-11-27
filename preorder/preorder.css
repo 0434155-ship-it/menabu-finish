@@ -179,10 +179,10 @@ html.hp-in-shop #mb-standard-store{display:none!important}
   .hp-hero-media img { object-position: center; aspect-ratio: auto; }
 }
 
-/* The three seasonal choices stay visible above the selected product. */
+/* All holiday products stay visible above the selected product. */
 .hp-page .hp-tabs {
   display: grid;
-  grid-template-columns: repeat(3,minmax(0,1fr));
+  grid-template-columns: repeat(5,minmax(0,1fr));
   gap: clamp(9px,2.5vw,36px);
   border-bottom: 0;
 }
@@ -206,7 +206,8 @@ html.hp-in-shop #mb-standard-store{display:none!important}
 .hp-tab-name {
   display: block;
   margin-top: .5em;
-  font: 400 clamp(.95rem,3.8vw,2.3rem)/1.05 var(--serif);
+  white-space: normal;
+  font: 400 clamp(1rem,2vw,1.75rem)/1.1 var(--serif);
   overflow-wrap: anywhere;
 }
 .hp-tab-note {
@@ -220,3 +221,16 @@ html.hp-in-shop #mb-standard-store{display:none!important}
 .hp-page .hp-fruitcake .hp-film { overflow: hidden; }
 .hp-page .hp-fruitcake button.hp-shot { aspect-ratio: 4 / 5; }
 .hp-page .hp-contact { display: inline-flex; margin-top: 1.2rem; }
+
+.hp-page .hp-hero h1 { font-size: clamp(2.5rem,5vw,6rem); }
+.hp-page .hp-detail .hp-help { margin-top: 1rem; }
+.hp-document #cartN[data-zero] { display: none; }
+@media (max-width: 830px) {
+  .hp-page .hp-tabs { grid-template-columns: repeat(3,minmax(0,1fr)); }
+  .hp-page .hp-tabs img { height: auto; }
+}
+
+@media (max-width: 830px) {
+  .hp-page .hp-hero-media img { height: min(52svh, 440px); }
+}
+.hp-page .hp-field input[type="date"] { width: 100%; min-width: 0; padding: .65em; border: 1px solid var(--line); background: transparent; }
