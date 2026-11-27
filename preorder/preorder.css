@@ -242,3 +242,5 @@ header .hp-season-banner .order-inner { padding-block: 9px; }
   .hp-page .hp-panel button.hp-shot { height: min(105vw,420px); }
 }
 @media (prefers-reduced-motion:reduce) { .hp-page .hp-pickup-photo { transition: none; } }
+
+.hp-page .hp-collection { scroll-margin-top: 100px; }

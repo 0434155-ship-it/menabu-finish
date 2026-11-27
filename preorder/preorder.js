@@ -21,6 +21,15 @@
   }
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 
+  function openLinkedProduct() {
+    const key = location.hash.slice(1);
+    if (!key || key.startsWith('hp-product-')) return;
+    const product = document.getElementById('hp-product-' + key);
+    if (product) product.scrollIntoView({block: 'start'});
+  }
+  window.addEventListener('hashchange', openLinkedProduct);
+  requestAnimationFrame(openLinkedProduct);
+
   const zoom = page.querySelector('[data-zoom-dialog]');
   page.querySelectorAll('[data-gallery]').forEach(gallery => {
     const film = gallery.querySelector('.hp-film');
