@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="../muka.css?v=food-photo-layout-1">
   <link rel="stylesheet" href="../bakery.css?v=partner-editorial">
   <link rel="stylesheet" href="../photography.css?v=founder-copy-1">
-  <link rel="stylesheet" href="preorder.css?v=holiday-cart-1">
+  <link rel="stylesheet" href="preorder.css?v=holiday-finish-1">
 </head>
 <body class="hp-document">
 <header class="top"><a class="skip" href="#hp-title">К содержанию</a><div class="shell navshell"><a class="brandmark" href="../#top" aria-label="Между Нами Булочками — на главную"><img src="../muka/brand.svg" width="397" height="190" alt="Между Нами Булочками — кафе и пекарня"></a><nav class="main" aria-label="Основное меню"><a href="../#catalog">Каталог</a><a href="../#about">Про нас</a><a href="../#food">Еда</a><a href="../#specialty" class="specialty-link">Спешелти</a><a href="../#wholesale">Для своих</a><a href="../#contacts">Контакты</a></nav><div class="navtools"><button class="basket" id="cartBtn" type="button" aria-label="Открыть корзину"><svg viewbox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.35" aria-hidden="true"><path d="M4.5 7.5h15l1 13h-17z"></path><path d="M8.5 9V6a3.5 3.5 0 0 1 7 0v3"></path></svg><span class="cartword">Корзина</span> <span class="n" id="cartN">0</span></button><button class="menu-toggle" id="menuToggle" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobileNav"><i></i><i></i></button></div></div><a class="winter hp-season-banner" href="#hp-collection"><div class="shell order-inner"><span class="season-star" aria-hidden="true"><svg viewBox="0 0 40 40" width="28" height="28" focusable="false"><path class="star-diagonals" d="m9.4 9.4 10.6 7.4 10.6-7.4L23.2 20l7.4 10.6L20 23.2 9.4 30.6 16.8 20z"/><path class="star-main" d="M20 1.1c.9 12.9 3 16.5 15.6 18.9C23 21.6 21 25.8 20 38.9 18.8 26 17 21.8 4.4 20 17 17.8 18.9 14 20 1.1Z"/><circle class="star-core" cx="20" cy="20" r="2.1"/></svg></span><span class="hp-season-copy"><span class="season-title">Штоллены | Панеттоне | Фруткейк</span></span></div></a><nav id="mobileNav" class="mobile-list" aria-label="Меню на телефоне" hidden><a href="../#catalog">Каталог</a><a href="../#about">Про нас</a><a href="../#food">Еда</a><a href="../#specialty" class="specialty-link">Спешелти</a><a href="../#wholesale">Для своих</a><a href="../#contacts">Контакты</a></nav></header>
@@ -100,11 +100,12 @@
             <h3 class="hp-category-title">Панеттоне</h3>
             <label class="hp-flavor-label">Вкус
               <select data-flavor aria-describedby="hp-description-panettones">
-                <option value="panettone" data-base="1850" data-weight="около 330 г" data-description="Воздушное тесто, апельсиновые цукаты и три вида шоколада. Вес — около 330 г.">Три шоколада, цукаты</option>
-                <option value="panettone-blueberry" data-base="1950" data-description="Сочная черника и цитрусовая свежесть свити в воздушном панеттоне.">Черника-свити</option>
+                <option value="panettone" data-base="1850" data-weight="около 330 г" data-description="Воздушный, нежный мякиш на итальянской закваске Lievito Madre. Белый, молочный и карамельный шоколад дают сливочные и тёплые карамельные ноты, а апельсиновые цукаты добавляют яркий цитрусовый акцент.">Три шоколада, цукаты</option>
+                <option value="panettone-blueberry" data-base="1950" data-description="В нежном, сливочном мякише на закваске Lievito Madre раскрывается сочная черника. Свити добавляет свежую цитрусовую ноту, которая подчёркивает вкус ягод.">Черника-свити</option>
               </select>
             </label>
-            <p class="hp-flavor-description" id="hp-description-panettones" data-description>Воздушное тесто, апельсиновые цукаты и три вида шоколада. Вес — около 330 г.</p>
+            <p class="hp-flavor-description" id="hp-description-panettones" data-description>Воздушный, нежный мякиш на итальянской закваске Lievito Madre. Белый, молочный и карамельный шоколад дают сливочные и тёплые карамельные ноты, а апельсиновые цукаты добавляют яркий цитрусовый акцент.</p>
+            <p class="hp-product-weight">Вес <span data-weight-label>около 330 г</span></p>
               <div class="hp-fields">
                 <div class="hp-field">
                   <label for="hp-panettone-quantity">Количество</label>
@@ -143,11 +144,11 @@
             <h3 class="hp-category-title">Штоллены</h3>
             <label class="hp-flavor-label">Вкус
               <select data-flavor aria-describedby="hp-description-stollens">
-                <option value="stollen" data-base="1450" data-large="2550" data-description="Щедрая россыпь цукатов и ароматные пряности.">Классический штоллен</option>
-                <option value="stollen-no-raisins" data-base="1550" data-large="2750" data-description="Штоллен долгого созревания без изюма.">Штоллен без изюма</option>
+                <option value="stollen" data-base="1450" data-large="2550" data-description="Наш декабрьский штоллен по европейской традиции. Под сахарной пудрой — плотный мякиш с цукатами и ароматом пряностей. Нарежьте тонкими ломтиками к чаю или возьмите в гости к праздничному столу.">Классический штоллен</option>
+                <option value="stollen-no-raisins" data-base="1550" data-large="2750" data-description="Рождественский штоллен для тех, кто любит эту выпечку без изюма. Даём тесту время созреть, чтобы вкус стал глубже, а аромат пряностей ярче. Хорош к чаю и в подарок.">Штоллен без изюма</option>
               </select>
             </label>
-            <p class="hp-flavor-description" id="hp-description-stollens" data-description>Щедрая россыпь цукатов и ароматные пряности.</p>
+            <p class="hp-flavor-description" id="hp-description-stollens" data-description>Наш декабрьский штоллен по европейской традиции. Под сахарной пудрой — плотный мякиш с цукатами и ароматом пряностей. Нарежьте тонкими ломтиками к чаю или возьмите в гости к праздничному столу.</p>
             
             <fieldset class="hp-sizes"><legend>Вес</legend><label><input type="radio" name="stollen-weight" value="base" checked><span>500 г</span></label><label><input type="radio" name="stollen-weight" value="large"><span>1 кг</span></label></fieldset>
               <div class="hp-fields">
@@ -174,22 +175,27 @@
     <section class="hp-pickup" id="hp-pickup" aria-labelledby="hp-pickup-title">
       <div class="hp-wrap hp-pickup-in">
         <div class="hp-pickup-copy">
-          <p class="hp-kicker hp-kicker-gold"><span class="hp-rule"></span>Выдача в Мытищах</p>
+          <p class="hp-kicker hp-kicker-gold"><span class="hp-rule"></span>Из нашей пекарни</p>
           <h2 id="hp-pickup-title">Как забрать <em>заказ</em></h2>
-          <p>Ваша праздничная выпечка будет ждать вас в Мытищах. Заберите заказ по одному из двух адресов пекарни или вызовите курьера через Яндекс Go.</p>
+          <p>Подготовим вашу праздничную выпечку к согласованному дню. Выберите, в какой из двух наших пекарен в Мытищах вам удобнее её забрать.</p>
+          <p>Если приехать не получается, можно отправить за заказом курьера через Яндекс Go. Позвоните нам, и мы подскажем, когда его лучше вызвать.</p>
           <ul class="hp-pickup-addresses">
             <li><a href="https://yandex.ru/maps/?text=%D0%9C%D1%8B%D1%82%D0%B8%D1%89%D0%B8%2C%20%D1%83%D0%BB.%20%D0%A1%D1%83%D0%BA%D1%80%D0%BE%D0%BC%D0%BA%D0%B0%2C%20%D0%B4.%205" target="_blank" rel="noopener">ул. Сукромка, 5 <span aria-hidden="true">↗</span></a></li>
             <li><a href="https://yandex.ru/maps/?text=%D0%9C%D1%8B%D1%82%D0%B8%D1%89%D0%B8%2C%20%D0%9D%D0%BE%D0%B2%D0%BE%D0%BC%D1%8B%D1%82%D0%B8%D1%89%D0%B8%D0%BD%D1%81%D0%BA%D0%B8%D0%B9%20%D0%BF%D1%80%D0%BE%D1%81%D0%BF%D0%B5%D0%BA%D1%82%2C%20%D0%B4.%2064%D0%BA1" target="_blank" rel="noopener">Новомытищинский проспект, 64к1 <span aria-hidden="true">↗</span></a></li>
           </ul>
           <a class="hp-phone" href="tel:+79852270561">+7 (985) 227-05-61</a>
         </div>
-        <img class="hp-pickup-image" src="photos/pickup-slices.webp" loading="lazy" width="1100" height="733" alt="Ломтики праздничного штоллена среди еловых веток">
+        <figure class="hp-pickup-motion"><img class="hp-pickup-image" src="photos/stollen-packed.webp" width="800" height="533" loading="lazy" alt="Штоллен пекарни в праздничной коробке на еловых ветках"></figure>
       </div>
     </section>
   </main>
-  <footer class="hp-foot"><div class="hp-wrap"><span>Между Нами Булочками · Мытищи</span><a href="../#contacts">Контакты пекарни</a></div></footer>
-
 </div>
+<footer>
+  <div class="shell endrow">
+    <span>Ремесленная пекарня · Мытищи</span>
+    <a href="#policy" data-policy>Конфиденциальность</a>
+  </div>
+</footer>
 <dialog id="policyDlg" class="policy" aria-label="О данных на сайте"><button id="polClose" type="button" class="x" aria-label="Закрыть">×</button><h2>О данных на сайте</h2><p>Выбранные товары сохраняются в корзине только в вашем браузере. Демонстрационное оформление не отправляет заказ в пекарню и не принимает оплату.</p><h3>Заявка для бизнеса</h3><p>Форма готовит текст сообщения. При переходе в Telegram этот текст откроется в чате с менеджером. Проверьте его и нажмите «Отправить», только если хотите связаться с пекарней.</p><p>Для заказа вы также можете позвонить в пекарню по номеру из раздела «Контакты».</p></dialog><div class="scrim" id="scrim" hidden></div>
 <aside class="drawer" id="drawer" hidden aria-label="Корзина">
   <div class="dhead"><h2 id="dTitle">Корзина</h2><button class="x" type="button" id="dClose" aria-label="Закрыть">×</button></div>
@@ -198,6 +204,6 @@
 </aside>
 <script src="../retail-catalog.js?v=catalog-canele-1" defer></script>
 <script src="../classic.js?v=holiday-cart-1" defer></script>
-<script src="preorder.js?v=holiday-cart-1" defer></script>
+<script src="preorder.js?v=holiday-finish-1" defer></script>
 </body>
 </html>
