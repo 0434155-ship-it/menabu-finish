@@ -1,5 +1,7 @@
 
-document.documentElement.classList.add('js');
+const cartOnly = document.body.classList.contains('hp-document');
+const cartHome = cartOnly ? '../' : '';
+if (!cartOnly) document.documentElement.classList.add('js');
 const CATS=[
  {id:'bread',name:'Хлеб на закваске',icon:'i-loaf',img:'1759_1',kick:'холодная ферментация от 12 часов'},
  {id:'puff',name:'Слоёное и булочки',icon:'i-croissant',img:'1992_1',kick:'масло 82,5%, раскатка вручную'},
@@ -51,9 +53,12 @@ function restoreCartItem(item) {
   }
   return null;
 }
-const savedCart = store.get('mnb-cart', []);
-let cart = Array.isArray(savedCart) ? savedCart.map(restoreCartItem).filter(Boolean) : [];
-store.set('mnb-cart', cart);
+function readCart() {
+  const savedCart = store.get('mnb-cart', []);
+  return Array.isArray(savedCart) ? savedCart.map(restoreCartItem).filter(Boolean) : [];
+}
+let cart = readCart();
+if (!cartOnly) store.set('mnb-cart', cart);
 let cat='bread';
 const pick={}; // выбранный вариант карточки
 for (const product of P) {
@@ -132,6 +137,7 @@ function card(p){
 }
 let visibleProducts=8,shownCat='';
 function renderGrid(){
+  if (cartOnly) return;
   if(cat!==shownCat){visibleProducts=8;shownCat=cat}
   const all=P.filter(p=>p.c===cat);
   const more=document.getElementById('moreProducts');more.hidden=visibleProducts>=all.length;
@@ -143,7 +149,7 @@ function renderBan(swap){
   $('#catbanImg').src=mnbMedia('img/'+c.img+'.jpg');$('#catbanN').textContent=c.kick;$('#catbanT').textContent=c.name;
   if(swap){b.classList.remove('swap');void b.offsetWidth;b.classList.add('swap')}
 }
-document.getElementById('moreProducts').onclick=()=>{const prev=visibleProducts;visibleProducts+=8;renderGrid();const added=$('#grid').children[prev];if(added){added.setAttribute('tabindex','-1');added.focus({preventScroll:true});added.scrollIntoView({behavior:'instant',block:'nearest'})}};
+if (!cartOnly) document.getElementById('moreProducts').onclick=()=>{const prev=visibleProducts;visibleProducts+=8;renderGrid();const added=$('#grid').children[prev];if(added){added.setAttribute('tabindex','-1');added.focus({preventScroll:true});added.scrollIntoView({behavior:'instant',block:'nearest'})}};
 function selectCategory(id) {
   if (id === cat) return;
   cat = id;
@@ -151,7 +157,7 @@ function selectCategory(id) {
   renderBan(true);
   renderGrid();
 }
-$('#tabs').addEventListener('click', e => {
+$('#tabs')?.addEventListener('click', e => {
   const button = e.target.closest('[data-c]');
   if (!button) return;
   selectCategory(button.dataset.c);
@@ -159,7 +165,7 @@ $('#tabs').addEventListener('click', e => {
     history.replaceState(history.state, '', cat === 'exclusive' ? '#exclusive' : '#catalog');
   }
 });
-$('#grid').addEventListener('click',e=>{
+$('#grid')?.addEventListener('click',e=>{
   const t=e.target.closest('button');if(!t)return;
   if(t.dataset.p){pick[t.dataset.p]=+t.dataset.i;renderGrid();return}
   const id=t.dataset.add||t.dataset.inc||t.dataset.dec;const p=P.find(x=>x.id===id);if(!p)return;
@@ -198,7 +204,7 @@ function renderBuilder(k){
     </div></div>`;
   if(changed){const im=el.querySelector('.ph img');im.style.opacity=0;im.style.transform='scale(1.08)';requestAnimationFrame(()=>requestAnimationFrame(()=>{im.style.opacity='';im.style.transform=''}))}
 }
-Object.keys(SEASONAL).forEach(k=>{
+if (!cartOnly) Object.keys(SEASONAL).forEach(k=>{
   const el=$('#b-'+k);
   el.addEventListener('change',e=>{const t=e.target,st=sp[k];
     if(t.name===k+'-flav'){st.flavor=t.value;st.slide=0} if(t.name===k+'-size')st.size=t.value; renderBuilder(k)});
@@ -211,7 +217,7 @@ Object.keys(SEASONAL).forEach(k=>{
 
 function slide(k,d){const g=$('#b-'+k+' .gal'),im=[...g.querySelectorAll('img')],n=im.length;if(n<2)return;
   const st=sp[k];st.slide=((st.slide||0)+d+n)%n;im.forEach((x,i)=>x.classList.toggle('on',i===st.slide));g.querySelectorAll('.dots i').forEach((x,i)=>x.classList.toggle('on',i===st.slide))}
-Object.keys(SEASONAL).forEach(k=>{let x0=null;const el=$('#b-'+k);
+if (!cartOnly) Object.keys(SEASONAL).forEach(k=>{let x0=null;const el=$('#b-'+k);
   el.addEventListener('touchstart',e=>{if(e.target.closest('.gal'))x0=e.touches[0].clientX},{passive:true});
   el.addEventListener('touchend',e=>{if(x0===null)return;const dx=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(dx)>40)slide(k,dx<0?1:-1)},{passive:true})});
 
@@ -222,7 +228,7 @@ function total(){
   return cart.reduce((sum,item) => sum + item.price * item.q, 0);
 }
 function renderCount(){const n=cart.reduce((s,x)=>s+x.q,0);const el=$('#cartN');if(String(n)!==el.textContent&&n>0){const c=$('#cartBtn');c.classList.remove('bump');void c.offsetWidth;c.classList.add('bump')}el.textContent=n;n?el.removeAttribute('data-zero'):el.setAttribute('data-zero','')}
-function openCart(){view='cart';renderDrawer();$('#drawer').hidden=false;$('#scrim').hidden=false;$('#dClose').focus()}
+function openCart(){if(cartOnly){cart=readCart();renderCount()}view='cart';renderDrawer();$('#drawer').hidden=false;$('#scrim').hidden=false;$('#dClose').focus()}
 function closeCart(){$('#drawer').hidden=true;$('#scrim').hidden=true;$('#cartBtn').focus()}
 $('#cartBtn').onclick=openCart;$('#dClose').onclick=closeCart;$('#scrim').onclick=closeCart;
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#drawer').hidden)closeCart()});
@@ -230,13 +236,13 @@ function renderDrawer(){
   const B=$('#dBody'),F=$('#dFoot');
   if(view==='cart'){
     $('#dTitle').textContent='Корзина';
-    if(!cart.length){B.innerHTML=`<div class="empty"><p>Корзина пока пустая.</p><a class="btn" href="#catalog" id="toCat">Перейти в каталог</a></div>`;F.innerHTML='';return}
+    if(!cart.length){B.innerHTML=`<div class="empty"><p>Корзина пока пустая.</p><a class="btn" href="${cartHome}#catalog" id="toCat">Перейти в каталог</a></div>`;F.innerHTML='';return}
     B.innerHTML=cart.map((x,i)=>`<div class="line"><div><b>${esc(x.name)}${x.pre?'<span class="pill">предзаказ</span>':''}</b><div class="meta">${esc(x.vl)}${x.opt?' · '+esc(x.opt):''} · ${Number.isFinite(x.price) ? rub(x.price) : 'Цену уточнить'}</div></div>
       <div class="lp">${Number.isFinite(x.price) ? rub(x.price*x.q) : ''}</div>
       <div class="ctl"><span class="stepper"><button type="button" data-ld="${i}" aria-label="Меньше">−</button><span>${x.q}</span><button type="button" data-li="${i}" aria-label="Больше">+</button></span><button class="rm" type="button" data-lr="${i}">Убрать</button></div></div>`).join('');
     const amount = total();
     F.innerHTML = amount === null
-      ? `<p class="hint">В корзине есть позиции с ценой по запросу. Свяжитесь с пекарней или уберите эти позиции, чтобы продолжить оформление.</p><a class="btn" href="#contacts" id="cartContacts">Контакты пекарни</a>`
+      ? `<p class="hint">В корзине есть позиции с ценой по запросу. Свяжитесь с пекарней или уберите эти позиции, чтобы продолжить оформление.</p><a class="btn" href="${cartHome}#contacts" id="cartContacts">Контакты пекарни</a>`
       : `<div class="sum"><span class="eyebrow">Итого</span><span class="price">${rub(amount)}</span></div><button class="btn solid" type="button" id="toCo">Оформить заказ</button>`;
   } else if(view==='co'){
     $('#dTitle').textContent='Оформление';
@@ -301,7 +307,7 @@ $('#drawer').addEventListener('click',e=>{
 });
 
 // ---------- опт ----------
-$('#optForm').addEventListener('submit',e=>{e.preventDefault();
+$('#optForm')?.addEventListener('submit',e=>{e.preventDefault();
   const ok=['#o-company','#o-name','#o-phone'].every(s=>$(s).value.trim());
   if(!ok){$('#optErr').textContent='Заполните компанию, имя и телефон, чтобы менеджер мог с вами связаться.';$('#optErr').hidden=false;return}
   if(!$('#o-ok').checked){$('#o-ok').closest('.consent').classList.add('bad');$('#optErr').textContent='Подтвердите подготовку обращения для Telegram.';$('#optErr').hidden=false;return}
@@ -357,8 +363,10 @@ function onScroll(){
   [[aboutImg,.09],[banImg,.14]].forEach(([el,k])=>{const r=el.parentElement.getBoundingClientRect();if(r.bottom<0||r.top>vh)return;
     el.style.translate=`0 ${((r.top+r.height/2-vh/2)*-k).toFixed(1)}px`});
 }
-addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(onScroll)}},{passive:true});
-addEventListener('resize',onScroll);
+if (!cartOnly) {
+  addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(onScroll)}},{passive:true});
+  addEventListener('resize',onScroll);
+}
 
 document.addEventListener('click',e=>{const a=e.target.closest('[data-policy]');if(!a)return;e.preventDefault();const d=$('#policyDlg');d.showModal?d.showModal():d.setAttribute('open','')});
 $('#polClose').onclick=()=>$('#policyDlg').close();
@@ -366,4 +374,14 @@ $('#policyDlg').addEventListener('click',e=>{if(e.target.id==='policyDlg')e.targ
 document.addEventListener('change',e=>{if(e.target.closest&&e.target.closest('.consent')&&e.target.checked)e.target.closest('.consent').classList.remove('bad')});
 let tt;function toast(m){const el=$('#toast');el.textContent=m;el.hidden=false;clearTimeout(tt);tt=setTimeout(()=>el.hidden=true,1800)}
 
-renderTabs();renderBan();renderGrid();Object.keys(SEASONAL).forEach(renderBuilder);renderCount();observeRv();onScroll();
+if (!cartOnly) {
+  renderTabs();renderBan();renderGrid();Object.keys(SEASONAL).forEach(renderBuilder);renderCount();observeRv();onScroll();
+} else {
+  renderCount();
+  addEventListener('storage', event => {
+    if (event.key !== 'mnb-cart' && event.key !== null) return;
+    cart = readCart();
+    renderCount();
+    if (!$('#drawer').hidden && view === 'cart') renderDrawer();
+  });
+}
