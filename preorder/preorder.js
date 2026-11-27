@@ -58,8 +58,21 @@
         : option?.textContent.trim() || group.querySelector('h3').textContent,
       size: weight?.nextElementSibling.textContent || option?.dataset.weight || '1 шт.',
       price: Number((option || form).dataset[weight?.value || 'base']),
-      description: option?.dataset.description
+      description: option?.dataset.description,
+      displayWeight: option?.dataset.weight
     };
+  }
+
+  function alignCarousel(group) {
+    const figure = group.querySelector('[data-photo]:not([hidden])');
+    const controls = group.querySelector('.hp-carousel-controls');
+    const image = figure?.querySelector('img');
+    if (!image || group.hidden) return;
+    const bounds = figure.getBoundingClientRect();
+    if (!bounds.width) return;
+    const photoWidth = controls.classList.contains('hp-carousel-portrait') || !image.naturalHeight
+      ? bounds.width : Math.min(bounds.width, image.clientHeight * image.naturalWidth / image.naturalHeight);
+    if (photoWidth > 0) controls.style.width = photoWidth + 'px';
   }
 
   function showPhoto(group, offset = 0) {
@@ -70,15 +83,19 @@
     const index = (Math.max(current, 0) + offset + matching.length) % matching.length;
     figures.forEach(figure => figure.hidden = figure !== matching[index]);
     const controls = group.querySelector('.hp-carousel-controls');
+    controls.classList.toggle('hp-carousel-portrait', matching[index].classList.contains('hp-image-fruit') || matching[index].classList.contains('hp-image-fruit-whole') || matching[index].classList.contains('hp-image-chocolate') || matching[index].classList.contains('hp-image-blueberry'));
     controls.hidden = matching.length < 2;
     controls.querySelector('[data-carousel-caption]').textContent =
       matching[index].querySelector('img').alt + ' · ' + (index + 1) + '/' + matching.length;
+    alignCarousel(group);
   }
 
   function updateProduct(group) {
     const item = product(group);
     const description = group.querySelector('p[data-description]');
     if (description) description.textContent = item.description;
+    const weightLabel = group.querySelector('[data-weight-label]');
+    if (weightLabel) weightLabel.textContent = item.displayWeight || 'уточняется';
     group.querySelector('[data-variant-price]').textContent = rubles.format(item.price) + ' ₽';
     showPhoto(group);
   }
@@ -97,6 +114,10 @@
     }
     updateProduct(group);
     updateQuantity();
+    if ('ResizeObserver' in window) {
+      const observer = new ResizeObserver(() => alignCarousel(group));
+      group.querySelectorAll('[data-photo] img').forEach(image => observer.observe(image));
+    }
 
     group.querySelectorAll('[data-step]').forEach(button => {
       button.addEventListener('click', () => showPhoto(group, Number(button.dataset.step)));
@@ -135,4 +156,14 @@
   }
   window.addEventListener('hashchange', openLinkedProduct);
   requestAnimationFrame(openLinkedProduct);
+
+  const pickupPhoto = page.querySelector('.hp-pickup-motion');
+  if (pickupPhoto && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(entries => {
+      if (!entries[0].isIntersecting) return;
+      pickupPhoto.classList.add('hp-pickup-in-view');
+      observer.disconnect();
+    }, {threshold: .35});
+    observer.observe(pickupPhoto);
+  }
 })();
