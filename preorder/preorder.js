@@ -46,15 +46,12 @@
   });
 
   function updateVariant(group) {
-    const selected = group.querySelector('.hp-variants input:checked');
+    const selected = group.querySelector('[data-flavor]')?.selectedOptions[0];
     if (!selected) return;
     group.querySelectorAll('[data-photo]').forEach(photo => photo.hidden = photo.dataset.photo !== selected.value);
-    const weight = group.querySelector('.hp-sizes input:checked');
-    if (!weight) return;
-    group.querySelectorAll('.hp-variants input').forEach(input => {
-      input.closest('label').querySelector('.hp-preview-price').textContent =
-        rubles.format(Number(input.dataset[weight.value])) + ' ₽';
-    });
+    group.querySelector('[data-description]').textContent = selected.dataset.description;
+    const weight = group.querySelector('.hp-sizes input:checked')?.value || 'base';
+    group.querySelector('[data-variant-price]').textContent = rubles.format(Number(selected.dataset[weight])) + ' ₽';
   }
 
   groups.forEach((group, index) => {
@@ -70,24 +67,12 @@
     const index = groups.findIndex(group => [...group.querySelectorAll('[data-photo]')].some(photo => photo.dataset.photo === key));
     if (index === -1) return;
     selectCategory(index);
-    const choice = [...groups[index].querySelectorAll('input[name$="-flavor"]')].find(input => input.value === key);
-    if (choice) choice.checked = true;
+    const choice = groups[index].querySelector('[data-flavor]');
+    if (choice) choice.value = key;
     updateVariant(groups[index]);
     page.querySelector('#hp-collection').scrollIntoView({block:'start'});
   }
   window.addEventListener('hashchange', openLinkedProduct);
   requestAnimationFrame(openLinkedProduct);
 
-  const scene = page.querySelector('[data-depth-scene]');
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-  scene.addEventListener('pointermove', event => {
-    if (reduced.matches || event.pointerType === 'touch') return;
-    const rect = scene.getBoundingClientRect();
-    scene.style.setProperty('--tilt-x', ((.5 - (event.clientY - rect.top) / rect.height) * 30).toFixed(1) + 'deg');
-    scene.style.setProperty('--tilt-y', (((event.clientX - rect.left) / rect.width - .5) * 40).toFixed(1) + 'deg');
-  });
-  scene.addEventListener('pointerleave', () => {
-    scene.style.removeProperty('--tilt-x');
-    scene.style.removeProperty('--tilt-y');
-  });
 })();
