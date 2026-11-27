@@ -45,20 +45,81 @@
     });
   });
 
-  function updateVariant(group) {
-    const selected = group.querySelector('[data-flavor]')?.selectedOptions[0];
-    if (!selected) return;
-    group.querySelectorAll('[data-photo]').forEach(photo => photo.hidden = photo.dataset.photo !== selected.value);
-    group.querySelector('[data-description]').textContent = selected.dataset.description;
-    const weight = group.querySelector('.hp-sizes input:checked')?.value || 'base';
-    group.querySelector('[data-variant-price]').textContent = rubles.format(Number(selected.dataset[weight])) + ' ₽';
+  const formatter = new Intl.DateTimeFormat('ru-RU', {day:'numeric', month:'long', year:'numeric', timeZone:'UTC'});
+  const today = new Intl.DateTimeFormat('sv-SE', {timeZone:'Europe/Moscow'}).format(new Date());
+
+  function product(group) {
+    const form = group.querySelector('form');
+    const option = form.querySelector('[data-flavor]')?.selectedOptions[0];
+    const weight = form.querySelector('.hp-sizes input:checked');
+    return {
+      id: option?.value || form.dataset.item,
+      name: group.dataset.category === 'panettones' ? 'Панеттоне — ' + option.textContent.trim()
+        : option?.textContent.trim() || group.querySelector('h3').textContent,
+      size: weight?.nextElementSibling.textContent || option?.dataset.weight || '1 шт.',
+      price: Number((option || form).dataset[weight?.value || 'base']),
+      description: option?.dataset.description
+    };
+  }
+
+  function showPhoto(group, offset = 0) {
+    const id = product(group).id;
+    const figures = [...group.querySelectorAll('[data-photo]')];
+    const matching = figures.filter(figure => figure.dataset.photo === id);
+    const current = matching.findIndex(figure => !figure.hidden);
+    const index = (Math.max(current, 0) + offset + matching.length) % matching.length;
+    figures.forEach(figure => figure.hidden = figure !== matching[index]);
+    const controls = group.querySelector('.hp-carousel-controls');
+    controls.hidden = matching.length < 2;
+    controls.querySelector('[data-carousel-caption]').textContent =
+      matching[index].querySelector('img').alt + ' · ' + (index + 1) + '/' + matching.length;
+  }
+
+  function updateProduct(group) {
+    const item = product(group);
+    const description = group.querySelector('p[data-description]');
+    if (description) description.textContent = item.description;
+    group.querySelector('[data-variant-price]').textContent = rubles.format(item.price) + ' ₽';
+    showPhoto(group);
   }
 
   groups.forEach((group, index) => {
     group.setAttribute('role', 'tabpanel');
     group.setAttribute('aria-labelledby', tabs[index].id);
-    updateVariant(group);
-    group.addEventListener('change', () => updateVariant(group));
+    const form = group.querySelector('form');
+    const quantity = form.elements.quantity;
+    const pickup = form.elements.pickup;
+    if (!pickup.min || pickup.min < today) pickup.min = today;
+    form.querySelector('[type=submit]').disabled = false;
+    function updateQuantity() {
+      form.querySelector('[data-quantity-step="-1"]').disabled = !quantity.value || quantity.valueAsNumber <= 1;
+      form.querySelector('[data-quantity-step="1"]').disabled = quantity.valueAsNumber >= 999;
+    }
+    updateProduct(group);
+    updateQuantity();
+
+    group.querySelectorAll('[data-step]').forEach(button => {
+      button.addEventListener('click', () => showPhoto(group, Number(button.dataset.step)));
+    });
+    form.querySelectorAll('[data-quantity-step]').forEach(button => {
+      button.addEventListener('click', () => {
+        if (button.dataset.quantityStep === '1') quantity.stepUp(); else quantity.stepDown();
+        updateQuantity();
+      });
+    });
+    quantity.addEventListener('input', updateQuantity);
+    form.addEventListener('change', event => {
+      if (event.target.matches('[data-flavor], .hp-sizes input')) updateProduct(group);
+    });
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      if (!form.reportValidity()) return;
+      const item = product(group);
+      addHolidayPreorder({
+        id: 'holiday-' + item.id, name: item.name, vl: item.size, price: item.price,
+        pickupDate: pickup.value, opt: formatter.format(pickup.valueAsDate), pre: 'holiday'
+      }, quantity.valueAsNumber);
+    });
   });
   selectCategory(0);
 
@@ -69,10 +130,9 @@
     selectCategory(index);
     const choice = groups[index].querySelector('[data-flavor]');
     if (choice) choice.value = key;
-    updateVariant(groups[index]);
+    updateProduct(groups[index]);
     page.querySelector('#hp-collection').scrollIntoView({block:'start'});
   }
   window.addEventListener('hashchange', openLinkedProduct);
   requestAnimationFrame(openLinkedProduct);
-
 })();

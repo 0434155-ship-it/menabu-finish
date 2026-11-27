@@ -41,6 +41,8 @@ const SEASONAL={
 const store={get(k,d){try{const s=localStorage.getItem(k);return s?JSON.parse(s):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 function restoreCartItem(item) {
   if (!item || !Number.isSafeInteger(item.q) || item.q < 1) return null;
+  if (item.pre === 'holiday' && /^holiday-(foodcake|panettone(?:-blueberry)?|stollen(?:-no-raisins)?)$/.test(item.id)
+      && /^\d{4}-\d{2}-\d{2}$/.test(item.pickupDate) && Number.isFinite(item.price) && item.price >= 0) return item;
   if (typeof item.pre === 'string' && Object.hasOwn(SEASONAL, item.pre) && item.id?.startsWith('pre-' + item.pre + '-')) return item;
   for (const product of P) {
     const variant = product.v.find(v =>
@@ -70,8 +72,13 @@ const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
 function save(){store.set('mnb-cart',cart);renderCount()}
-function key(it){return it.id+'|'+it.vl+'|'+(it.opt||'')}
+function key(it){return it.id+'|'+it.vl+'|'+(it.pickupDate||it.opt||'')}
 function addItem(it,qty){const k=key(it);const f=cart.find(x=>key(x)===k);if(f)f.q+=qty;else cart.push({...it,q:qty});save();toast(it.name+' — в корзине')}
+function addHolidayPreorder(item, quantity) {
+  cart = readCart();
+  addItem(item, quantity);
+  openCart();
+}
 function qtyOf(id,vl){const f=cart.find(x=>x.id===id&&x.vl===vl&&!x.opt);return f?f.q:0}
 function setQty(id,vl,q,min){const i=cart.findIndex(x=>x.id===id&&x.vl===vl&&!x.opt);if(i<0)return;if(q<(min||1))cart.splice(i,1);else cart[i].q=q;save()}
 
@@ -248,6 +255,7 @@ function renderDrawer(){
     $('#dTitle').textContent='Оформление';
     const preKinds=[...new Set(cart.map(x=>x.pre))].filter(k=>Object.hasOwn(SEASONAL,k));
     const pre=preKinds.length>0, exclusive=cart.some(x=>x.pre==='exclusive');
+    const holidayItems=cart.filter(item=>item.pre==='holiday');
     const today=new Date().toISOString().slice(0,10);
     B.innerHTML=`<div class="co"><p class="demo-note">Демонстрационное оформление. Заказ не отправляется, деньги не списываются.</p><form id="coForm" novalidate>
       <div class="f"><label class="l" for="c-name">Имя</label><input id="c-name" type="text" autocomplete="name" required></div>
@@ -259,8 +267,9 @@ function renderDrawer(){
       </fieldset>
       <div class="f" id="addrF" hidden><label class="l" for="c-addr">Адрес доставки</label><input id="c-addr" type="text" autocomplete="street-address"></div>
       ${preKinds.map(k=>`<div class="f"><label class="l" for="c-pre-${k}">Дата выдачи: ${SEASONAL[k].pn}</label><select id="c-pre-${k}" data-pre="${SEASONAL[k].holiday}">${SEASONAL[k].pickup.map(d=>`<option>${d}</option>`).join('')}</select></div>`).join('')}
+      ${holidayItems.map(item=>`<p class="hint">${esc(item.name)} · желаемая выдача ${esc(item.opt)}</p>`).join('')}
       ${exclusive?`<div class="f"><label class="l" for="c-exclusive">Желаемая дата предзаказа</label><input id="c-exclusive" type="date" min="${today}" value="${today}" required><small>Дату выдачи нужно согласовать с пекарней.</small></div>`:''}
-      ${cart.some(x=>!x.pre)?`<div class="f"><label class="l" for="c-date">${pre||exclusive?'Дата для остальных позиций':'Дата'}</label><input id="c-date" type="date" min="${today}" value="${today}"></div>`:''}
+      ${cart.some(x=>!x.pre)?`<div class="f"><label class="l" for="c-date">${pre||exclusive||holidayItems.length?'Дата для остальных позиций':'Дата'}</label><input id="c-date" type="date" min="${today}" value="${today}"></div>`:''}
       <div class="f"><label class="l" for="c-msg">Комментарий</label><textarea id="c-msg" rows="2" placeholder="Например, нарезать хлеб"></textarea></div>
       <fieldset><legend>Оплата</legend>
         <label class="opt-r"><input type="radio" name="pay" value="online" checked><span>Онлайн: картой или через СБП<small>Пример выбора способа оплаты</small></span></label>
@@ -298,7 +307,7 @@ $('#drawer').addEventListener('click',e=>{
     if(exclusiveDate && !exclusiveDate.reportValidity()) return;
     const how=document.querySelector('input[name=how]:checked').value+(document.querySelector('input[name=how]:checked').value==='Доставка'?': '+$('#c-addr').value:'');
     const pay=document.querySelector('input[name=pay]:checked').value;
-    order={no:'МН-'+String(Date.now()).slice(-5),sum:total(),phone,how,pre:[...document.querySelectorAll('select[data-pre]')].map(x=>x.dataset.pre+' — '+x.value).concat(exclusiveDate ? ['Исключительно для вас — '+exclusiveDate.value] : []).join(', '),paid:false};
+    order={no:'МН-'+String(Date.now()).slice(-5),sum:total(),phone,how,pre:[...document.querySelectorAll('select[data-pre]')].map(x=>x.dataset.pre+' — '+x.value).concat(cart.filter(item=>item.pre==='holiday').map(item=>item.name+' — '+item.opt), exclusiveDate ? ['Исключительно для вас — '+exclusiveDate.value] : []).join(', '),paid:false};
     if(pay==='online'){view='pay'}else{view='done';cart=[];save();renderGrid()}
     renderDrawer();
   }
@@ -372,7 +381,7 @@ document.addEventListener('click',e=>{const a=e.target.closest('[data-policy]');
 $('#polClose').onclick=()=>$('#policyDlg').close();
 $('#policyDlg').addEventListener('click',e=>{if(e.target.id==='policyDlg')e.target.close()});
 document.addEventListener('change',e=>{if(e.target.closest&&e.target.closest('.consent')&&e.target.checked)e.target.closest('.consent').classList.remove('bad')});
-let tt;function toast(m){const el=$('#toast');el.textContent=m;el.hidden=false;clearTimeout(tt);tt=setTimeout(()=>el.hidden=true,1800)}
+let tt;function toast(m){const el=$('#toast');if(!el)return;el.textContent=m;el.hidden=false;clearTimeout(tt);tt=setTimeout(()=>el.hidden=true,1800)}
 
 if (!cartOnly) {
   renderTabs();renderBan();renderGrid();Object.keys(SEASONAL).forEach(renderBuilder);renderCount();observeRv();onScroll();
