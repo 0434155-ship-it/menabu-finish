@@ -18,15 +18,6 @@
         toggle.focus();
       }
     });
-    document.getElementById('cartBtn').addEventListener('click', () => location.assign('../#catalog'));
-    let count = 0;
-    try {
-      const cart = JSON.parse(localStorage.getItem('mnb-cart') || '[]');
-      if (Array.isArray(cart)) count = cart.reduce((total, item) => total + (Number(item?.q) || 0), 0);
-    } catch {}
-    const badge = document.getElementById('cartN');
-    badge.textContent = count;
-    badge.toggleAttribute('data-zero', count === 0);
   }
   const tabs = [...page.querySelectorAll('[data-hp-tab]')];
   const panels = [...page.querySelectorAll('[data-hp-panel]')];
