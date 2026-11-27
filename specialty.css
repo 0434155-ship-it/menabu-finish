@@ -1,0 +1,52 @@
+.specialty .sp-shell {
+  display: grid;
+  gap: clamp(48px, 7vw, 100px);
+}
+.sp-lead, .sp-grain {
+  display: grid;
+  grid-template-columns: minmax(0, .87fr) minmax(0, 1fr);
+  gap: clamp(28px, 6vw, 96px);
+  align-items: center;
+}
+.sp-photo { margin: 0; }
+.sp-photo img { display: block; width: 100%; height: auto; }
+.sp-lead .sp-photo { width: min(100%, 450px); margin-inline: auto; }
+.specialty h2, .specialty h3, .specialty h4, .specialty p { margin: 0; }
+.specialty h2 {
+  font: 480 clamp(44px, 5vw, 76px)/1.05 var(--sans);
+  letter-spacing: -.055em;
+  margin-bottom: clamp(20px, 3vw, 40px);
+}
+.specialty h3, .specialty .sp-name {
+  font: 400 clamp(27px, 3vw, 46px)/1.12 var(--sans);
+  letter-spacing: -.035em;
+}
+.specialty h4, .sp-drinks dt { font: 550 20px/1.3 var(--sans); margin-top: 1.4em; }
+.specialty p, .sp-drinks dd {
+  font: 400 16px/1.6 var(--sans);
+  color: #f0dede;
+  max-width: 56ch;
+}
+.specialty .sp-name { color: #fff3df; }
+.specialty .sp-role { color: #efc9aa; font-size: 14px; margin: 6px 0 22px; }
+.sp-story blockquote {
+  margin: 24px 0 16px; padding-inline-start: 18px; border-inline-start: 2px solid #ce9d81;
+  font: 400 clamp(19px, 2vw, 26px)/1.35 var(--sans);
+}
+.sp-story cite { display: block; margin-top: 8px; font: 400 13px/1.5 var(--sans); color: #edccbc; }
+.sp-story summary { cursor: pointer; padding-block: 12px; font: 500 15px/1.4 var(--sans); text-decoration: underline; text-underline-offset: 4px; }
+.sp-story summary:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+.sp-story details p + p { margin-top: 8px; }
+.sp-grain { grid-template-columns: minmax(0, 1fr) minmax(0, .95fr); }
+.sp-grain h3 + p, .sp-grain h4 + p { margin-top: 14px; }
+.sp-drinks { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(20px, 3vw, 48px); margin: 28px 0 0; }
+.sp-drinks > div { display: flex; flex-direction: column; border-top: 1px solid #9f7883; }
+.sp-drinks dt { margin: 18px 0 8px; }
+.sp-drinks dd { margin: 0; }
+.sp-drinks .sp-price { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; flex-wrap: wrap; padding-top: 18px; margin-top: auto; font-size: 14px; }
+.sp-price b { font-size: 17px; color: #fff3df; white-space: nowrap; }
+@media (max-width: 760px) {
+  .sp-lead, .sp-grain, .sp-drinks { grid-template-columns: minmax(0, 1fr); }
+  .sp-lead .sp-photo { width: min(100%, 360px); }
+  .sp-drinks { gap: 26px; }
+}
