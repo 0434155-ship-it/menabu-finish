@@ -429,10 +429,9 @@ header .hp-season-banner .order-inner { min-height: 40px; padding-block: 5px; }
   position:absolute; inset:0; display:block; width:100%; height:100%; object-fit:contain; object-position:center;
 }
 
-.hp-page #hp-category-fruitcake .hp-product-options { container-type:inline-size; }
-.hp-page #hp-category-fruitcake .hp-category-title { font-size:clamp(1.25rem,9.25cqi,3.2rem); white-space:nowrap; }
+.hp-page .hp-product-options { container-type:inline-size; }
+.hp-page .hp-category-title { font-size:clamp(1.25rem,9.25cqi,3.2rem); white-space:nowrap; }
 .hp-page .hp-product-visual .hp-panettone-landscape > img { object-fit:cover; }
-.hp-page .hp-product-visual .hp-panettone-crumb > img { object-position:center 34%; }
 .hp-page .hp-product-visual .hp-panettone-pair > img { object-position:center 57%; }
 
 .hp-page .hp-pickup { position:relative; isolation:isolate; background:#172323; color:#fffbf3; }
@@ -464,3 +463,7 @@ header .hp-season-banner .order-inner { min-height: 40px; padding-block: 5px; }
   .hp-page .hp-pickup-photo-wrap .hp-pickup-image { aspect-ratio:1.78; height:auto; object-position:right center; }
   .hp-page .hp-pickup::after { display:none; }
 }
+
+.hp-page .hp-image-crumb-full { position:relative; overflow:hidden; aspect-ratio:990/925; --top-cut:-18.1818%; }
+.hp-page .hp-pickup-composition { display:block; }
+.hp-pickup-real-stollen { filter:brightness(.94) saturate(.9) sepia(.1) drop-shadow(4px 10px 10px #111b0ba8); }
