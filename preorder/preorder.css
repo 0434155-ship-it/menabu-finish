@@ -407,3 +407,5 @@ header .hp-season-banner .order-inner { min-height: 40px; padding-block: 5px; }
 @media(max-width:680px) {
  .hp-page .hp-product-group,.hp-page .hp-product-group:is([data-category="fruitcake"],[data-category="panettones"]) { grid-template-columns:minmax(0,1fr); }
 }
+
+.hp-page .hp-pickup-motion .hp-pickup-image { aspect-ratio:6/5; object-fit:cover; object-position:center 54%; }
