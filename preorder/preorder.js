@@ -67,8 +67,9 @@
     const figure = group.querySelector('[data-photo]:not([hidden])');
     const controls = group.querySelector('.hp-carousel-controls');
     const image = figure?.querySelector('img');
+    const window = figure?.querySelector('.hp-image-window');
     if (!image || group.hidden) return;
-    const bounds = figure.getBoundingClientRect();
+    const bounds = (window || figure).getBoundingClientRect();
     if (!bounds.width) return;
     const photoWidth = controls.classList.contains('hp-carousel-portrait') || !image.naturalHeight
       ? bounds.width : Math.min(bounds.width, image.clientHeight * image.naturalWidth / image.naturalHeight);
@@ -83,7 +84,7 @@
     const index = (Math.max(current, 0) + offset + matching.length) % matching.length;
     figures.forEach(figure => figure.hidden = figure !== matching[index]);
     const controls = group.querySelector('.hp-carousel-controls');
-    controls.classList.toggle('hp-carousel-portrait', matching[index].classList.contains('hp-image-fruit') || matching[index].classList.contains('hp-image-fruit-whole') || matching[index].classList.contains('hp-image-chocolate') || matching[index].classList.contains('hp-image-blueberry'));
+    controls.classList.toggle('hp-carousel-portrait', matching[index].classList.contains('hp-product-portrait'));
     controls.hidden = matching.length < 2;
     controls.querySelector('[data-carousel-caption]').textContent =
       matching[index].querySelector('img').alt + ' · ' + (index + 1) + '/' + matching.length;

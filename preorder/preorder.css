@@ -387,25 +387,36 @@ header .hp-season-banner .order-inner { min-height: 40px; padding-block: 5px; }
 .hp-page .hp-carousel-controls { max-width:100%; }
 .hp-page .hp-carousel-controls [data-carousel-caption] { min-width:0; }
 
-.hp-page .hp-hero-new {
-  display:grid; gap:.22em; width:fit-content; max-width:100%; padding:.6em .9em .7em;
-  border-inline-start:2px solid #e8b780; background:#221810cf; color:#f8ebd9;
-}
-.hp-page .hp-hero-new-label { color:#f2c490; font-size:.75em; font-weight:650; letter-spacing:.11em; text-transform:uppercase; }
-.hp-page .hp-hero-new a { width:fit-content; font:400 clamp(1.38rem,2.45vw,2.08rem)/1.1 var(--serif); text-decoration:underline; text-decoration-color:#edcca37d; text-underline-offset:.18em; }
-.hp-page .hp-hero-new a:hover { color:#fff1d7; text-decoration-color:currentColor; }
 .hp-page .hp-collection { padding-block:clamp(34px,4.2vw,68px) clamp(50px,6.3vw,104px); }
 .hp-page .hp-category-tabs { margin-bottom:clamp(24px,4.3vw,54px); }
 .hp-page .hp-product-group { grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr); gap:clamp(26px,3.6vw,58px); }
-.hp-page .hp-product-group:is([data-category="fruitcake"],[data-category="panettones"]) { grid-template-columns:minmax(0,min(38vw,370px)) minmax(0,530px); }
 .hp-page .hp-pickup-addresses li { min-width:0; }
 .hp-page .hp-pickup-addresses .hp-phone { display:block; width:fit-content; margin-top:.4rem; font-size:.96rem; }
-@media(prefers-reduced-motion:no-preference) {
-  .hp-page .hp-hero-new { animation:hp-new-arrival .75s ease-out both; }
-}
-@keyframes hp-new-arrival { from { opacity:.35; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
 @media(max-width:680px) {
  .hp-page .hp-product-group,.hp-page .hp-product-group:is([data-category="fruitcake"],[data-category="panettones"]) { grid-template-columns:minmax(0,1fr); }
 }
 
 .hp-page .hp-pickup-motion .hp-pickup-image { aspect-ratio:6/5; object-fit:cover; object-position:center 54%; }
+
+.hp-page .hp-hero-feature { max-width:100%; }
+.hp-page .hp-hero-feature a {
+  color:#f3d3a8; font-weight:650; text-decoration:none;
+}
+.hp-page .hp-hero-feature a span { display:inline-block; margin-inline-start:.15em; font-size:.78em; }
+.hp-page .hp-hero-feature a:is(:hover,:focus-visible) { text-decoration:underline; text-underline-offset:.2em; }
+.hp-page .hp-fruit-description { border-top:1px solid var(--line); margin-top:1.2rem; padding-top:.9rem; }
+.hp-page .hp-product-portrait {
+  min-width:0; display:grid; justify-items:end; aspect-ratio:3/2;
+}
+.hp-page .hp-product-portrait .hp-image-window {
+  width:min(100%,370px); align-self:start;
+}
+.hp-page .hp-product-portrait .hp-image-window img {
+  position:absolute; inset:0 auto auto 0; transform:translateY(var(--top-cut)); max-height:none;
+}
+.hp-page .hp-image-fruit-whole { --top-cut:-35.15625%; }
+.hp-page .hp-carousel-controls.hp-carousel-portrait { margin-inline-start:auto; }
+@media (max-width:680px) {
+  .hp-page .hp-product-portrait { justify-items:center; aspect-ratio:auto; }
+  .hp-page .hp-carousel-controls.hp-carousel-portrait { margin-inline:auto; }
+}
