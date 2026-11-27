@@ -285,3 +285,43 @@ header .hp-season-banner .order-inner { padding-block: 9px; }
   .hp-page .hp-product-image { max-width:350px; }
 }
 @media (prefers-reduced-motion:reduce) { .hp-page .hp-depth-art { transition:none; } }
+
+.hp-page .catalog-heading #hp-collection-title {
+  font-family: MenabuSerif,Georgia,'Times New Roman',serif;
+  font-size: clamp(53px,6.2vw,95px);
+  font-weight: 300;
+  line-height: 1.02;
+  letter-spacing: -.066em;
+  text-wrap: initial;
+  margin: 0;
+}
+.hp-page .hp-category-tabs { margin-bottom: clamp(24px,4.5vw,58px); }
+.hp-page .hp-category-tabs button { font-size: clamp(1.15rem,2.25vw,1.8rem); }
+.hp-page .hp-product-group { grid-template-columns: minmax(0,1.35fr) minmax(0,1fr); }
+.hp-page .hp-product-group + .hp-product-group { margin-top: 0; }
+.hp-page .hp-product-image { width: 100%; }
+.hp-page :is(.hp-product-image.hp-image-fruit,.hp-product-image.hp-image-chocolate,.hp-product-image.hp-image-blueberry) { max-width: 390px; }
+.hp-page .hp-category-title,.hp-page .hp-single-product h3 {
+  font: 400 clamp(2.2rem,4.55vw,4.4rem)/1.02 var(--serif);
+  letter-spacing: -.045em;
+}
+.hp-page .hp-flavor-label {
+  display: grid; gap: .35rem; margin-top: 1.2rem; padding-top: .9rem;
+  border-top: 1px solid var(--line); font-size: .88rem; font-weight: 600;
+}
+.hp-page .hp-flavor-label select { min-height: 44px; padding: .45em .65em; border: 1px solid #a69685; background: transparent; font-weight: 400; }
+.hp-page .hp-flavor-description { margin-top: .55em; color: var(--soft); }
+.hp-page .hp-product-options [data-variant-price] { margin-top: .7em; color: var(--berry); }
+.hp-page .hp-pickup-in { display: block; }
+.hp-page .hp-pickup-copy { width: 100%; }
+.hp-page .hp-pickup-copy>p:not(.hp-kicker) { max-width: 54ch; }
+.hp-page .hp-pickup-addresses { grid-template-columns: repeat(2,minmax(0,max-content)); gap: .75rem clamp(28px,6vw,90px); }
+.hp-page .hp-collection { scroll-margin-top: 155px; }
+@media (min-width: 831px) {
+  .hp-page .hp-hero-media img { transform: translateX(clamp(55px,8vw,135px)); mask-image: linear-gradient(90deg,transparent,#000 17%); }
+}
+@media (max-width:680px) {
+  .hp-page .hp-product-group { grid-template-columns: minmax(0,1fr); }
+  .hp-page .hp-pickup-copy { width: calc(100% - 40px); }
+  .hp-page .hp-pickup-addresses { grid-template-columns: minmax(0,1fr); }
+}
