@@ -3,6 +3,31 @@
   const page = document.getElementById('hp-page');
   if (!page) return;
   const embedded = page.hasAttribute('data-embedded');
+  const menu = document.getElementById('mobileNav');
+  const toggle = document.getElementById('menuToggle');
+  if (!embedded && menu && toggle) {
+    function setMenu(open) {
+      menu.hidden = !open;
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Закрыть меню' : 'Открыть меню');
+    }
+    toggle.addEventListener('click', () => setMenu(menu.hidden));
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && !menu.hidden) {
+        setMenu(false);
+        toggle.focus();
+      }
+    });
+    document.getElementById('cartBtn').addEventListener('click', () => location.assign('../#catalog'));
+    let count = 0;
+    try {
+      const cart = JSON.parse(localStorage.getItem('mnb-cart') || '[]');
+      if (Array.isArray(cart)) count = cart.reduce((total, item) => total + (Number(item?.q) || 0), 0);
+    } catch {}
+    const badge = document.getElementById('cartN');
+    badge.textContent = count;
+    badge.toggleAttribute('data-zero', count === 0);
+  }
   const tabs = [...page.querySelectorAll('[data-hp-tab]')];
   const panels = [...page.querySelectorAll('[data-hp-panel]')];
   const names = tabs.map(tab => tab.dataset.hpTab);
@@ -174,10 +199,13 @@
       if (!form.reportValidity()) return;
       const selected = flavor.selectedOptions[0];
       const size = controls.namedItem('size')?.value || selected.dataset.weight;
+      const pickup = date.type === 'date'
+        ? new Intl.DateTimeFormat('ru-RU', {day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC'}).format(date.valueAsDate)
+        : date.value + ' ' + form.dataset.year;
       const rows = [
         ['Выпечка', selected.dataset.kind || form.dataset.product], ['Вкус', flavor.value], ['Вес',size],
-        ['Количество', qty.value + ' шт.'], ['Желаемая выдача', date.value + ' ' + form.dataset.year]
-      ];
+        ['Количество', qty.value + ' шт.'], ['Желаемая выдача', pickup]
+      ].filter(([, value]) => value);
       const summary = order.querySelector('[data-summary]');
       summary.replaceChildren(...rows.map(([key,value]) => {
         const row = document.createElement('div');
