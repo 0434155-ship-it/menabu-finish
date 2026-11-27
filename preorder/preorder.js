@@ -139,4 +139,14 @@
   window.addEventListener('hashchange', openLinkedProduct);
   requestAnimationFrame(openLinkedProduct);
 
+  const pickup = page.querySelector('.hp-pickup');
+  if (pickup && 'IntersectionObserver' in window) {
+    let stopSnow;
+    const observer = new IntersectionObserver(([entry]) => {
+      clearTimeout(stopSnow);
+      pickup.classList.toggle('hp-snow-visible', entry.isIntersecting);
+      if (entry.isIntersecting) stopSnow = setTimeout(() => pickup.classList.remove('hp-snow-visible'), 4900);
+    });
+    observer.observe(pickup);
+  }
 })();

@@ -428,3 +428,39 @@ header .hp-season-banner .order-inner { min-height: 40px; padding-block: 5px; }
 .hp-page .hp-product-visual .hp-product-image > img {
   position:absolute; inset:0; display:block; width:100%; height:100%; object-fit:contain; object-position:center;
 }
+
+.hp-page #hp-category-fruitcake .hp-product-options { container-type:inline-size; }
+.hp-page #hp-category-fruitcake .hp-category-title { font-size:clamp(1.25rem,9.25cqi,3.2rem); white-space:nowrap; }
+.hp-page .hp-product-visual .hp-panettone-landscape > img { object-fit:cover; }
+.hp-page .hp-product-visual .hp-panettone-crumb > img { object-position:center 34%; }
+.hp-page .hp-product-visual .hp-panettone-pair > img { object-position:center 57%; }
+
+.hp-page .hp-pickup { position:relative; isolation:isolate; background:#172323; color:#fffbf3; }
+.hp-page .hp-pickup-in { position:static; display:flex; align-items:center; min-height:clamp(465px,37vw,680px); }
+.hp-page .hp-pickup-copy { width:min(100%,510px); z-index:2; margin:0; }
+.hp-page .hp-pickup-copy>p:not(.hp-kicker) { color:#f0ece1; }
+.hp-page .hp-pickup-addresses { column-gap:clamp(16px,2.5vw,38px); }
+.hp-page .hp-pickup-photo-wrap { position:absolute; z-index:-2; inset:0; width:100%; height:100%; margin:0; }
+.hp-page .hp-pickup-photo-wrap .hp-pickup-image { width:100%; height:100%; aspect-ratio:auto; object-position:right center; }
+.hp-page .hp-pickup::after { content:""; position:absolute; inset:0; z-index:-1; pointer-events:none; background:linear-gradient(90deg,#111c1cf5 0%,#111c1ce8 29%,#111c1ca8 43%,transparent 69%); }
+.hp-page .hp-snowfall { position:absolute; z-index:1; inset:0; pointer-events:none; overflow:hidden; }
+.hp-snowfall span { position:absolute; left:var(--x); inset-block:0; width:var(--size); opacity:0; }
+.hp-snowfall span::before {
+  content:""; position:absolute; top:0; width:var(--size); height:var(--size);
+  border-radius:50%; background:#fffaf0; box-shadow:0 0 4px #fff8; 
+}
+@media (prefers-reduced-motion:no-preference) {
+  .hp-pickup.hp-snow-visible .hp-snowfall span { animation:hp-snow-fall var(--duration) linear var(--delay) infinite; }
+}
+@keyframes hp-snow-fall {
+  0% { transform:translate3d(0,-6%,0); opacity:0; }
+  12%,82% { opacity:.63; }
+  100% { transform:translate3d(var(--drift),102%,0); opacity:0; }
+}
+@media(max-width:830px) {
+  .hp-page .hp-pickup-in { display:grid; min-height:0; padding:41px 0 0; gap:24px; }
+  .hp-page .hp-pickup-copy { width:calc(100% - 40px); margin-inline:auto; }
+  .hp-page .hp-pickup-photo-wrap { position:relative; z-index:0; width:100%; height:auto; }
+  .hp-page .hp-pickup-photo-wrap .hp-pickup-image { aspect-ratio:1.78; height:auto; object-position:right center; }
+  .hp-page .hp-pickup::after { display:none; }
+}
