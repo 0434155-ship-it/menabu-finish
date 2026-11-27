@@ -170,67 +170,75 @@ html.hp-in-shop #mb-standard-store{display:none!important}
 @media(forced-colors:active){.hp-sizes input:checked+span{outline:2px solid Highlight}.hp-tabs a[aria-selected=true]{text-decoration:underline}}
 
 
-/* Preserve the entire stollen at wide and intermediate screen sizes as well. */
-.hp-hero-media img { object-fit: contain; object-position: center right; }
-@media (min-width: 831px) {
-  .hp-hero-media picture { mask-image: linear-gradient(to right, transparent, #000 9%); }
-}
-@media (max-width: 830px) {
-  .hp-hero-media img { object-position: center; aspect-ratio: auto; }
-}
-
-/* All holiday products stay visible above the selected product. */
-.hp-page .hp-tabs {
-  display: grid;
-  grid-template-columns: repeat(5,minmax(0,1fr));
-  gap: clamp(9px,2.5vw,36px);
-  border-bottom: 0;
-}
-.hp-page .hp-tabs a {
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: flex-start;
-  padding: 0 0 clamp(8px,1.5vw,18px);
-  border-bottom: 1px solid var(--line);
-}
-.hp-tabs img {
-  display: block;
-  width: 100%;
-  aspect-ratio: 4 / 5;
-  max-height: 390px;
-  object-fit: contain;
-  object-position: center;
-}
-.hp-tab-name {
-  display: block;
-  margin-top: .5em;
-  white-space: normal;
-  font: 400 clamp(1rem,2vw,1.75rem)/1.1 var(--serif);
-  overflow-wrap: anywhere;
-}
-.hp-tab-note {
-  display: block;
-  margin-top: .36rem;
-  color: var(--soft);
-  font: 400 clamp(.64rem,1.55vw,.9rem)/1.35 var(--sans);
-}
-.hp-page .hp-gallery .hp-film,
-.hp-page .hp-gallery button.hp-shot { background: transparent; }
-.hp-page .hp-fruitcake .hp-film { overflow: hidden; }
-.hp-page .hp-fruitcake button.hp-shot { aspect-ratio: 4 / 5; }
-.hp-page .hp-contact { display: inline-flex; margin-top: 1.2rem; }
-
-.hp-page .hp-hero h1 { font-size: clamp(2.5rem,5vw,6rem); }
-.hp-page .hp-detail .hp-help { margin-top: 1rem; }
-.hp-document #cartN[data-zero] { display: none; }
-@media (max-width: 830px) {
-  .hp-page .hp-tabs { grid-template-columns: repeat(3,minmax(0,1fr)); }
-  .hp-page .hp-tabs img { height: auto; }
-}
-
-@media (max-width: 830px) {
-  .hp-page .hp-hero-media img { height: min(52svh, 440px); }
-}
 .hp-page .hp-field input[type="date"] { width: 100%; min-width: 0; padding: .65em; border: 1px solid var(--line); background: transparent; }
+
+.hp-season-banner .hp-season-copy { display: grid; gap: 3px; }
+header .hp-season-banner .season-title { font: 500 clamp(.94rem,1.7vw,1.38rem)/1.15 HolidaySerif,Georgia,serif; }
+header .hp-season-banner .season-date { padding: 0; border: 0; white-space: normal; font-size: clamp(.7rem,1.15vw,.84rem); }
+header .hp-season-banner .order-inner { padding-block: 9px; }
+
+.hp-page .hp-hero { display: block; }
+.hp-page .hp-hero-media, .hp-page .hp-hero-media picture {
+  position: absolute; inset: 0; width: 100%; height: 100%; mask-image: none;
+}
+.hp-page .hp-hero-media { z-index: -2; }
+.hp-page .hp-hero-media img { width: 100%; height: 100%; object-fit: cover; object-position: center 55%; }
+.hp-page .hp-hero-media::before {
+  display: block; background: linear-gradient(90deg,#17130feb 0%,#17130fbf 35%,#17130f33 72%,transparent);
+}
+.hp-page .hp-hero-inner { min-height: clamp(470px,48vw,690px); }
+.hp-page .hp-hero-copy { width: min(100%, 530px); }
+.hp-page .hp-hero-lead { max-width: 43ch; }
+.hp-page .hp-hero-lead + .hp-hero-lead { margin-top: .8em; }
+
+.hp-page .hp-collection { padding-block: clamp(48px,7vw,112px); }
+.hp-page #hp-collection-title { font-size: clamp(2.55rem,6vw,5rem); margin-bottom: .7em; }
+.hp-page .hp-showcase { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: clamp(14px,2.5vw,38px); align-items: start; }
+.hp-page .hp-panel {
+  display: block; min-width: 0; padding: 0; margin: 0; border: 1px solid #e4d8c7;
+  background: #fffcf6; box-shadow: 0 12px 30px #55301b0d; scroll-margin-top: 155px;
+}
+.hp-page .hp-panel .hp-film { max-width: none; background: #ece4d8; }
+.hp-page .hp-panel button.hp-shot { aspect-ratio: auto; height: clamp(260px,35vw,450px); background: transparent; }
+.hp-page .hp-panel .hp-gallery-foot { padding-inline: 14px; }
+.hp-page .hp-detail { padding: clamp(17px,2.2vw,30px); }
+.hp-page .hp-detail h3 { font: 400 clamp(1.7rem,2.8vw,2.8rem)/1.02 var(--serif); letter-spacing: -.03em; }
+.hp-page .hp-detail .hp-desc { font-size: .98rem; margin-top: .85em; }
+.hp-page .hp-preorder-details { margin-top: 1.2rem; }
+.hp-page .hp-preorder-details summary {
+  cursor: pointer; color: var(--berry); font-weight: 650; padding: .65em 0;
+  border-top: 1px solid var(--line);
+}
+.hp-page .hp-detail .hp-contact { margin-top: 1rem; padding-inline: 1em; }
+.hp-page .hp-detail .hp-fields { grid-template-columns: minmax(0,1fr); }
+
+.hp-page .hp-pickup {
+  background: radial-gradient(ellipse at 75% 60%,#6a2838,#32141e 72%);
+}
+.hp-page .hp-pickup-in { align-items: center; padding-block: clamp(38px,6vw,90px); }
+.hp-page .hp-pickup-copy { padding: 0; }
+.hp-page .hp-pickup-scene { perspective: 850px; padding: 20px 25px 26px; }
+.hp-page .hp-pickup-photo {
+  position: relative; border: 1px solid #c99668; padding: 9px; background: #542734;
+  box-shadow: 4px 5px #b17d57, 8px 10px #633442, 19px 24px 30px #180811a8;
+  transform: rotateY(-13deg) rotateX(5deg) rotateZ(-2deg);
+  transition: transform .45s ease;
+}
+.hp-page .hp-pickup-photo img { width: 100%; height: auto; }
+@media (hover:hover) and (prefers-reduced-motion:no-preference) {
+  .hp-page .hp-pickup-scene:hover .hp-pickup-photo { transform: rotateY(-3deg) rotateX(1deg) translateZ(16px); }
+}
+@media (max-width: 900px) {
+  .hp-page .hp-showcase { grid-template-columns: repeat(2,minmax(0,1fr)); }
+}
+@media (max-width: 830px) {
+  .hp-page .hp-hero-inner { align-items: end; padding-block: 112px 32px; }
+  .hp-page .hp-hero-media::before { background: linear-gradient(0deg,#17130ffc 2%,#17130fbd 53%,#17130f26 100%); }
+  .hp-page .hp-pickup-copy { padding-inline: 0; }
+  .hp-page .hp-pickup-scene { width: min(89%,420px); margin: 14px auto 0; }
+}
+@media (max-width: 540px) {
+  .hp-page .hp-showcase { grid-template-columns: minmax(0,1fr); }
+  .hp-page .hp-panel button.hp-shot { height: min(105vw,420px); }
+}
+@media (prefers-reduced-motion:reduce) { .hp-page .hp-pickup-photo { transition: none; } }
