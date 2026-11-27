@@ -19,138 +19,75 @@
       }
     });
   }
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const tabs = [...page.querySelectorAll('[role="tab"]')];
+  const tablist = page.querySelector('.hp-category-tabs');
+  const groups = tabs.map(tab => document.getElementById(tab.getAttribute('aria-controls')));
+  const rubles = new Intl.NumberFormat('ru-RU');
+  tablist.hidden = false;
+
+  function selectCategory(index) {
+    tabs.forEach((tab, position) => {
+      const active = index === position;
+      tab.setAttribute('aria-selected', String(active));
+      tab.tabIndex = active ? 0 : -1;
+      groups[position].hidden = !active;
+    });
+  }
+
+  tabs.forEach((tab, index) => {
+    tab.addEventListener('click', () => selectCategory(index));
+    tab.addEventListener('keydown', event => {
+      const next = {ArrowLeft:(index + tabs.length - 1) % tabs.length, ArrowRight:(index + 1) % tabs.length, Home:0, End:tabs.length - 1}[event.key];
+      if (next === undefined) return;
+      event.preventDefault();
+      selectCategory(next);
+      tabs[next].focus();
+    });
+  });
+
+  function updateVariant(group) {
+    const selected = group.querySelector('.hp-variants input:checked');
+    if (!selected) return;
+    group.querySelectorAll('[data-photo]').forEach(photo => photo.hidden = photo.dataset.photo !== selected.value);
+    const weight = group.querySelector('.hp-sizes input:checked');
+    if (!weight) return;
+    group.querySelectorAll('.hp-variants input').forEach(input => {
+      input.closest('label').querySelector('.hp-preview-price').textContent =
+        rubles.format(Number(input.dataset[weight.value])) + ' ₽';
+    });
+  }
+
+  groups.forEach((group, index) => {
+    group.setAttribute('role', 'tabpanel');
+    group.setAttribute('aria-labelledby', tabs[index].id);
+    updateVariant(group);
+    group.addEventListener('change', () => updateVariant(group));
+  });
+  selectCategory(0);
 
   function openLinkedProduct() {
-    const key = location.hash.slice(1);
-    if (!key || key.startsWith('hp-product-')) return;
-    const product = document.getElementById('hp-product-' + key);
-    if (product) product.scrollIntoView({block: 'start'});
+    const key = location.hash.slice(1).replace(/^hp-product-/, '');
+    const index = groups.findIndex(group => [...group.querySelectorAll('[data-photo]')].some(photo => photo.dataset.photo === key));
+    if (index === -1) return;
+    selectCategory(index);
+    const choice = [...groups[index].querySelectorAll('input[name$="-flavor"]')].find(input => input.value === key);
+    if (choice) choice.checked = true;
+    updateVariant(groups[index]);
+    page.querySelector('#hp-collection').scrollIntoView({block:'start'});
   }
   window.addEventListener('hashchange', openLinkedProduct);
   requestAnimationFrame(openLinkedProduct);
 
-  const zoom = page.querySelector('[data-zoom-dialog]');
-  page.querySelectorAll('[data-gallery]').forEach(gallery => {
-    const film = gallery.querySelector('.hp-film');
-    const shots = [...film.querySelectorAll('.hp-shot')];
-    const caption = gallery.querySelector('.hp-gallery-caption');
-    const [previous, next] = gallery.querySelectorAll('[data-gallery-step]');
-    let position = 0;
-    function update() {
-      if (!film.clientWidth) return;
-      position = Math.min(shots.length-1, Math.max(0, Math.round(film.scrollLeft / film.clientWidth)));
-      caption.textContent = shots[position].querySelector('img').dataset.caption;
-      previous.disabled = position === 0;
-      next.disabled = position === shots.length-1;
-    }
-    function go(step) {
-      const index = Math.max(0, Math.min(shots.length-1, position+step));
-      film.scrollTo({left:index * film.clientWidth, behavior:reduced.matches ? 'instant' : 'smooth'});
-    }
-    previous.disabled = true;
-    previous.addEventListener('click', () => go(-1));
-    next.addEventListener('click', () => go(1));
-    film.addEventListener('scroll', update, {passive:true});
-    new ResizeObserver(update).observe(film);
-    film.addEventListener('keydown', event => {
-      if (!['ArrowRight','ArrowLeft'].includes(event.key)) return;
-      event.preventDefault();
-      go(event.key === 'ArrowRight' ? 1 : -1);
-    });
-    shots.forEach(shot => shot.addEventListener('click', () => {
-      const origin = shot.querySelector('img');
-      const large = zoom.querySelector('[data-zoom-image]');
-      large.src = origin.currentSrc || origin.src;
-      large.alt = origin.alt;
-      zoom.querySelector('[data-zoom-caption]').textContent = origin.dataset.caption;
-      zoom.showModal();
-    }));
+  const scene = page.querySelector('[data-depth-scene]');
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  scene.addEventListener('pointermove', event => {
+    if (reduced.matches || event.pointerType === 'touch') return;
+    const rect = scene.getBoundingClientRect();
+    scene.style.setProperty('--tilt-x', ((.5 - (event.clientY - rect.top) / rect.height) * 30).toFixed(1) + 'deg');
+    scene.style.setProperty('--tilt-y', (((event.clientX - rect.left) / rect.width - .5) * 40).toFixed(1) + 'deg');
   });
-  page.querySelectorAll('dialog').forEach(dialog => {
-    dialog.querySelector('[data-dismiss]').addEventListener('click', () => dialog.close());
-    dialog.addEventListener('click', e => {
-      if (e.target !== dialog) return;
-      const box = dialog.getBoundingClientRect();
-      if (e.clientX < box.left || e.clientX > box.right || e.clientY < box.top || e.clientY > box.bottom) dialog.close();
-    });
-  });
-
-  const order = page.querySelector('[data-order-dialog]');
-  const feedback = order.querySelector('[data-copy-status]');
-  let message = '';
-  page.querySelectorAll('form[data-product]').forEach(form => {
-    const controls = form.elements;
-    const flavor = controls.namedItem('flavor');
-    const qty = controls.namedItem('qty');
-    const date = controls.namedItem('date');
-    const minus = form.querySelector('[data-qty="-1"]');
-    const plus = form.querySelector('[data-qty="1"]');
-    function quantities() {
-      minus.disabled = !qty.value || qty.valueAsNumber <= Number(qty.min);
-      plus.disabled = qty.valueAsNumber >= Number(qty.max);
-    }
-    function updateFlavor() {
-      const selected = flavor.selectedOptions[0];
-      form.querySelector('[data-flavor-note]').textContent = selected.dataset.note;
-      const weight = form.querySelector('[data-flavor-weight]');
-      if (weight) weight.textContent = selected.dataset.weight;
-    }
-    updateFlavor();
-    quantities();
-    form.querySelector('[type="submit"]').disabled = false;
-    flavor.addEventListener('change', updateFlavor);
-    qty.addEventListener('input', quantities);
-    form.querySelectorAll('[data-qty]').forEach(button => button.addEventListener('click', () => {
-      if (!Number.isFinite(qty.valueAsNumber)) qty.value = 1;
-      else if (button === plus) qty.stepUp();
-      else qty.stepDown();
-      quantities();
-    }));
-    form.addEventListener('submit', event => {
-      event.preventDefault();
-      if (!form.reportValidity()) return;
-      const selected = flavor.selectedOptions[0];
-      const size = controls.namedItem('size')?.value || selected.dataset.weight;
-      const pickup = date.type === 'date'
-        ? new Intl.DateTimeFormat('ru-RU', {day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC'}).format(date.valueAsDate)
-        : date.value + ' ' + form.dataset.year;
-      const rows = [
-        ['Выпечка', selected.dataset.kind || form.dataset.product], ['Вкус', flavor.value], ['Вес',size],
-        ['Количество', qty.value + ' шт.'], ['Желаемая выдача', pickup]
-      ].filter(([, value]) => value);
-      const summary = order.querySelector('[data-summary]');
-      summary.replaceChildren(...rows.map(([key,value]) => {
-        const row = document.createElement('div');
-        const term = document.createElement('dt');
-        const description = document.createElement('dd');
-        term.textContent = key; description.textContent = value;
-        row.append(term, description);
-        return row;
-      }));
-      message = 'Добрый день! Хочу сделать предзаказ.\n\n' + rows.map(([key,value]) => key + ': ' + value).join('\n') + '\n\nПодтвердите, пожалуйста, стоимость, дату и адрес выдачи.';
-      feedback.textContent = '';
-      order.querySelector('textarea')?.remove();
-      order.showModal();
-    });
-  });
-  order.querySelector('[data-copy]').addEventListener('click', async () => {
-    try {
-      await navigator.clipboard.writeText(message);
-      feedback.textContent = 'Заявка скопирована.';
-    } catch {
-      let area = order.querySelector('textarea');
-      if (!area) {
-        area = document.createElement('textarea');
-        area.setAttribute('aria-label', 'Текст заявки для копирования');
-        area.readOnly = true;
-        area.rows = 6;
-        area.style.width = '100%';
-        feedback.before(area);
-      }
-      area.value = message;
-      area.select();
-      feedback.textContent = 'Текст выделен. Выберите «Копировать».';
-    }
+  scene.addEventListener('pointerleave', () => {
+    scene.style.removeProperty('--tilt-x');
+    scene.style.removeProperty('--tilt-y');
   });
 })();
